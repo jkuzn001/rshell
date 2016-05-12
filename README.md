@@ -14,9 +14,10 @@ rshell (Turtle Shell) Features
 *Can run all bash commands within /bin
 
 *Can support all connectors such as;
-  
-  -";" = the following command will always be exectued.
-
+* ";" = The following command will always be exectued.
+* "||" = If the current command fails, the following command will be executed.
+* "&&" = If the current command succeeds, the following command will be executed.
+* "#" = Everything after "#" will be a comment.
 
 Bugs
 ----
