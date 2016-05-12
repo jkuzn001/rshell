@@ -9,7 +9,13 @@ UML DIAGRAM
 
 ![Alt text](UML_Diagram.png?raw=true "Optional Title")
 
+rshell (Turtle Shell) Features
+------------
+*Can run all bash commands within /bin
 
+*Can support all connectors such as;
+  
+<tab>-";" = the following command will always be exectued.
 
 
 Bugs
