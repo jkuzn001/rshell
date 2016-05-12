@@ -39,16 +39,16 @@ void Cmd::add_flag(char*a) {
     flags.push_back(a);
 }
 //For Debugging Purposes
-/*string Cmd::getCommand() {
+string Cmd::getCommand() {
     return command;
-}*/
+}
 
-/*void Cmd::printFlags()   {
+void Cmd::printFlags()   {
 
     for(unsigned i=0; i<flags.size(); i++)  {
         cout << flags.at(i) << " ";
     }
-}*/
+}
 
 //executes the command using the system calls fork
 //execvp and wait returns true if the command is executed
@@ -56,10 +56,9 @@ void Cmd::add_flag(char*a) {
 bool Cmd::execute() {
     //c-string array to pass to execvp
     flags.push_back(NULL);
-    
-    //int size = flags.size() + 1;
-    char* args[100];
-    for(unsigned i = 1; i < flags.size() + 1; ++i) {
+
+    char* args[flags.size() + 1];
+    for(int i = 1; i < flags.size() + 1; ++i) {
         args[i] = flags.at(i - 1);
     }
 
@@ -86,8 +85,8 @@ bool Cmd::execute() {
        if(WEXITSTATUS(status) == 1) {
            ret = false;
        }
+        return ret;
     }
-    return ret;
 }
 
 #endif

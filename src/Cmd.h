@@ -22,9 +22,9 @@ class Cmd: public Base {
 
 
     //For Debugging Purposes
-    //string getCommand();
+    string getCommand();
 
-    //void printFlags();
+    void printFlags();
 };
 
 #endif
