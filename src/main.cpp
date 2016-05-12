@@ -54,7 +54,6 @@ int main(int argc, char**argv) {
         getline(cin, userInput);
 
         if(userInput == "exit") {
-            cout << "\nExiting" << endl;
             break;
         }
         char *cstr = new char[userInput.size()+1];

@@ -3,30 +3,37 @@ CC=g++
 CFLAGS =-c -Wall -Werror -ansi -pedantic
 all: rshell
 
-rshell: main.o Connector.o Cmd.o AND.o OR.o Semicolon.o Exit.o
-	$(CC) main.o Connector.o Cmd.o AND.o OR.o Semicolon.o Exit.o -o rshell
+rshell:
+	main Connector Cmd AND OR Semicolon Exit
+	$(CC) main Connector Cmd AND OR Semicolon Exit -o rshell
 
-main.o: main.cpp
+main:
+	main.cpp
 	$(CC) $(CFLAGS) main.cpp
 
-Connector.o: Connector.cpp
+Connector:
+	Connector.cpp
 	$(CC) $(CFLAGS) Connector.cpp
 
-Cmd.o: Cmd.cpp
+Cmd:
+	Cmd.cpp
 	$(CC) $(CFLAGS) Cmd.cpp
 
-AND.o: AND.cpp Connector.cpp
+AND:
+	AND.cpp Connector.cpp
 	$(CC) $(CFLAGS) AND.cpp
 
-OR.o: OR.cpp Connector.cpp
+OR:
+	OR.cpp Connector.cpp
 	$(CC) $(CFLAGS) OR.cpp
 
-Semicolon.o: Semicolon.cpp Connector.cpp
+Semicolon:
+	Semicolon.cpp Connector.cpp
 	$(CC) $(CFLAGS) Semicolon.cpp
 
-Exit.o: Exit.cpp Cmd.cpp
+Exit:
+	Exit.cpp Cmd.cpp
 	$(CC) $(CFLAGS) Exit.cpp
-
 
 clean:
 	rm -rf *o rshell
