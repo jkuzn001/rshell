@@ -15,7 +15,7 @@ rshell (Turtle Shell) Features
 
 *Can support all connectors such as;
   
-<tab>-";" = the following command will always be exectued.
+  -";" = the following command will always be exectued.
 
 
 Bugs
