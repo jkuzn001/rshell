@@ -22,6 +22,14 @@ UML DIAGRAM
 
 ![Alt text](UML_Diagram.png?raw=true "Optional Title")
 
+Execute based on Tree Representation
+------------
+![Alt text](tree.png?raw=true "Optional Title")
+
+Parsing with Tokens!!!
+------------
+![Alt text](Tokens.png?raw=true "Optional Title")
+
 rshell (Turtle Shell) Features
 ------------
 *Can run all bash commands within /bin
