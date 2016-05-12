@@ -7,6 +7,9 @@ This is the rshell project of Jacob Kuznicki and Lam Le for cs 100 spring 2016. 
 UML DIAGRAM
 ------------
 
+![Alt text](UML_Diagram.png?raw=true "Optional Title")
+
+
 
 
 Bugs
