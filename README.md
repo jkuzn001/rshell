@@ -5,8 +5,11 @@ Installation
 Please run the following commands in terminal to run our rshell (Turtle Shell) on your computer
 ```Installation
 $ git clone https://github.com/jkuzn001/rshell.git
+
 $ cd rshell
+
 $ make
+
 $ bin/rshell
 ```
 
@@ -31,7 +34,12 @@ rshell (Turtle Shell) Features
 
 Bugs
 ----
-A bug was encountered where a child process would not properly exit on a failed call to execvp but this was fixed by changing the wait system call to waitpid and using the WEXITSTATUS macro to determine the success of the child process which was killed using the exit command
+Current Bugs: 
+*Echo Command: There is currently a bug with the echo command being placed in the middle of the user inputs.
+For example, the command "ls; echo Hello World && exit" will run the "ls" command and the "echo" command with the flag
+"Hello World", but the current parsing algorithm will cause the "&&" connector to be recognized as a command instead of a connector. There for the last command would be "&&" as the command and "exit" as the connector. We will solve this by restructing the parsing algorithm to meet this case.
+
+A bug was encountered where a child process would not properly exit on a failed call to execvp but this was fixed by changing the wait system call to waitpid and using the WEXITSTATUS macro to determine the success of the child process which was killed using the exit command.
 Authors
 -------
 [Jacob Kuznicki]: https://github.com/jkuzn001
