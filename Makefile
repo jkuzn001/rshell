@@ -1,39 +1,31 @@
-CC=g++
+CC= g++
 
-CFLAGS =-c -Wall -Werror -ansi -pedantic
-all: rshell
+CFLAGS = -Wall -Werror -ansi -pedantic
 
-rshell:
-	main Connector Cmd AND OR Semicolon Exit
-	$(CC) main Connector Cmd AND OR Semicolon Exit -o rshell
+all:
+	mkdir -p ./bin
+	$(CC) $(CFLAGS) ./src/main.cpp -o ./bin/rshell
 
 main:
-	main.cpp
-	$(CC) $(CFLAGS) main.cpp
+	$(CC) $(CFLAGS) ./src/main.cpp
 
 Connector:
-	Connector.cpp
-	$(CC) $(CFLAGS) Connector.cpp
+	$(CC) $(CFLAGS) ./src/Connector.cpp
 
 Cmd:
-	Cmd.cpp
-	$(CC) $(CFLAGS) Cmd.cpp
+	$(CC) $(CFLAGS) ./src/Cmd.cpp
 
 AND:
-	AND.cpp Connector.cpp
-	$(CC) $(CFLAGS) AND.cpp
+	$(CC) $(CFLAGS) ./src/AND.cpp
 
 OR:
-	OR.cpp Connector.cpp
-	$(CC) $(CFLAGS) OR.cpp
+	$(CC) $(CFLAGS) ./src/OR.cpp
 
 Semicolon:
-	Semicolon.cpp Connector.cpp
-	$(CC) $(CFLAGS) Semicolon.cpp
+	$(CC) $(CFLAGS) ./src/Semicolon.cpp
 
 Exit:
-	Exit.cpp Cmd.cpp
-	$(CC) $(CFLAGS) Exit.cpp
+	$(CC) $(CFLAGS) ./src/Exit.cpp
 
 clean:
-	rm -rf *o rshell
+	rm -rf ./bin

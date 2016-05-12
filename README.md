@@ -34,7 +34,7 @@ rshell (Turtle Shell) Features
 
 Bugs
 ----
-Current Bugs: 
+Current Bugs:
 *Echo Command: There is currently a bug with the echo command being placed in the middle of the user inputs.
 For example, the command "ls; echo Hello World && exit" will run the "ls" command and the "echo" command with the flag
 "Hello World", but the current parsing algorithm will cause the "&&" connector to be recognized as a command instead of a connector. There for the last command would be "&&" as the command and "exit" as the connector. We will solve this by restructing the parsing algorithm to meet this case.

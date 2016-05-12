@@ -39,7 +39,7 @@ void Cmd::add_flag(char*a) {
     flags.push_back(a);
 }
 //For Debugging Purposes
-string Cmd::getCommand() {
+/*string Cmd::getCommand() {
     return command;
 }
 
@@ -48,7 +48,7 @@ void Cmd::printFlags()   {
     for(unsigned i=0; i<flags.size(); i++)  {
         cout << flags.at(i) << " ";
     }
-}
+}*/
 
 //executes the command using the system calls fork
 //execvp and wait returns true if the command is executed
@@ -57,9 +57,9 @@ bool Cmd::execute() {
     //c-string array to pass to execvp
     flags.push_back(NULL);
 
-    char* args[flags.size() + 1];
-    for(int i = 1; i < flags.size() + 1; ++i) {
-        args[i] = flags.at(i - 1);
+    char *args[flags.size()+1];
+    for(int i=1; i<flags.size()+1; i++) {
+        args[i] = flags.at(i-1);
     }
 
     //return value of the function
@@ -71,7 +71,7 @@ bool Cmd::execute() {
         perror("fork");
     }
     else if (pid == 0) {
-        if(execvp(command.c_str(),args) == -1) {
+        if(execvp(command.c_str(), args) == -1) {
             ret = false;
             perror("execvp");
             exit(1);
@@ -85,8 +85,10 @@ bool Cmd::execute() {
        if(WEXITSTATUS(status) == 1) {
            ret = false;
        }
-        return ret;
+
     }
+    //delete[] args;
+    return ret;
 }
 
 #endif

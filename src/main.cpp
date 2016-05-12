@@ -109,7 +109,6 @@ int main(int argc, char**argv) {
                 commandList.push(testingCommand);
             }
             else {
-                Cmd *tempCommand = new Cmd(p);
                 commandList.push(testingCommand);
                 p = q;
                 p = strtok(NULL, " ");
