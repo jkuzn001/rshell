@@ -7,8 +7,9 @@
 //constructors
 AND::AND(Base* lhs, Base* rhs): Connector(lhs,rhs) {}
 AND::AND(): Connector() {}
+
 //executes its right child if its left child has executed
-//returns true if both children execute successfully 
+//returns true if both children execute successfully
 //otherwise returns false
 bool AND::execute() {
     if(lhs->execute()){

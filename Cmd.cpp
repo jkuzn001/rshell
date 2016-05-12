@@ -16,28 +16,56 @@ using namespace std;
 #include "Cmd.h"
 
 //constructors
+/*
 Cmd::Cmd(string command, vector<char*> flags)
 : command(command), flags(flags) {}
 Cmd::Cmd(string command): command(command){}
+*/
+
+Cmd::Cmd(string command, vector<char *> flags) {
+    this->command = command;
+    this->flags = flags;
+}
+
+
+Cmd::Cmd(string command) {
+    this->command = command;
+    vector<char*> temp;
+    this->flags = temp;
+}
+
+
+void Cmd::add_flag(char*a) {
+    flags.push_back(a);
+}
+//For Debugging Purposes
+string Cmd::getCommand() {
+    return command;
+}
+
+void Cmd::printFlags()   {
+
+    for(unsigned i=0; i<flags.size(); i++)  {
+        cout << flags.at(i) << " ";
+    }
+}
+
 //executes the command using the system calls fork
-//execvp and wait returns true if the command is executed 
+//execvp and wait returns true if the command is executed
 //and false if it fails
 bool Cmd::execute() {
-    
-    //puts null character at the end of the flags array
+    //c-string array to pass to execvp
     flags.push_back(NULL);
 
-    
-    //c-string array to pass to execvp
     char* args[flags.size() + 1];
     for(int i = 1; i < flags.size() + 1; ++i) {
         args[i] = flags.at(i - 1);
     }
-      
+
     //return value of the function
     //true if command executes
     bool ret = true;
- 
+
     pid_t pid = fork();
     if(pid == -1) {
         perror("fork");

@@ -13,10 +13,18 @@ class Cmd: public Base {
     //constructors
     Cmd(string command, vector<char*> flags);
     Cmd(string command);
+
+    void add_flag(char *a);
     //executes the command using the system calls fork
-    //execvp and wait returns true if the command is executed 
+    //execvp and wait returns true if the command is executed
     //and false if it fails
     virtual bool execute();
+
+
+    //For Debugging Purposes
+    string getCommand();
+
+    void printFlags();
 };
 
 #endif

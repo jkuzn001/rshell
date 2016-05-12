@@ -5,6 +5,7 @@
 
 class OR: public Connector {
     //constructors
+    public:
     OR(Base* lhs, Base* rhs);
     OR();
     //execute function
