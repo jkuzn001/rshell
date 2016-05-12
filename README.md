@@ -4,7 +4,9 @@ Introduction
 ------------
 This is the rshell project of Jacob Kuznicki and Lam Le for cs 100 spring 2016. It takes in commands (from bash and special comands such as exit) and connectors and executes them.  We accomplished this by using a composite design pattern connisting of connector class (which acts as the composite class) and a command class (which acts as the leaf).
 
-#UML Diagram
+UML DIAGRAM
+------------
+
 
 
 Bugs
