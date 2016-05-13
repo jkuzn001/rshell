@@ -17,6 +17,7 @@ using namespace std;
 #include "AND.cpp"
 #include "OR.cpp"
 #include "Semicolon.cpp"
+#include "Exit.cpp"
 
 bool checkCon(char *q) {
     vector<string> s;
@@ -53,6 +54,8 @@ int main(int argc, char**argv) {
         getline(cin, userInput);
 
         if(userInput == "exit") {
+            Exit *exit = new Exit();
+            exit->execute();
             break;
         }
         char *cstr = new char[userInput.size()+1];
@@ -88,6 +91,11 @@ int main(int argc, char**argv) {
         else {
         //Parsing String
             while(p!=0) {
+                char *commentP = (char *) memchr(p, '#', strlen(p));
+                if(commentP != NULL) {
+                    break;
+                }
+
                 Cmd *testingCommand = new Cmd(p);
                 char *q = p;
 
@@ -98,31 +106,38 @@ int main(int argc, char**argv) {
                         //bool checkCommands = checkCom(q);
                         bool checkConnectors = checkCon(q);
 
-                        if(checkConnectors) {
-                            char *semi = (char *) memchr(q, ';', strlen(q));
+                        char *comment = (char *) memchr(q, '#', strlen(q));
+                        if(comment != NULL) {
 
-                            if(semi != NULL) {
-                                string tempQ = string(q);
-                                tempQ = tempQ.substr(0, tempQ.size()-1);
-                                strcpy(q, tempQ.c_str());
-
-                                testingCommand->add_flag(q);
-
-                                string Colon = ";";
-                                char *pushColon = new char[2];
-                                strcpy(pushColon, Colon.c_str());
-                                connectorList.push(pushColon);
-                                break;
-                            }
-                            else {
-                                testingCommand->add_flag(q);
-                            }
                         }
                         else {
-                            if(!checkConnectors) {
-                                connectorList.push(q);
+                            if(checkConnectors) {
+                                char *semi = (char *) memchr(q, ';', strlen(q));
+
+                                if(semi != NULL) {
+                                    string tempQ = string(q);
+                                    tempQ = tempQ.substr(0, tempQ.size()-1);
+                                    strcpy(q, tempQ.c_str());
+
+                                    testingCommand->add_flag(q);
+
+                                    string Colon = ";";
+                                    char *pushColon = new char[2];
+                                    strcpy(pushColon, Colon.c_str());
+                                    connectorList.push(pushColon);
+                                    break;
+                                }
+
+                                else {
+                                    testingCommand->add_flag(q);
+                                }
                             }
-                            break;
+                            else {
+                                if(!checkConnectors) {
+                                    connectorList.push(q);
+                                }
+                                break;
+                            }
                         }
                         q = strtok(NULL, " ");
                     }
@@ -130,7 +145,13 @@ int main(int argc, char**argv) {
                     p = q;
                     p = strtok(NULL, " ");
 
-                    commandList.push(testingCommand);
+                    if(testingCommand->getCommand() == "exit") {
+                        Exit *out = new Exit();
+                        commandList.push(out);
+                    }
+                    else {
+                        commandList.push(testingCommand);
+                    }
                 }
                 else {
                     commandList.push(testingCommand);

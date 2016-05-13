@@ -35,16 +35,17 @@ Cmd::Cmd(char* command) {
     this->flags = temp;
 }
 
+Cmd::Cmd() {}
 
 void Cmd::add_flag(char*a) {
     flags.push(a);
 }
 //For Debugging Purposes
-/*string Cmd::getCommand() {
+string Cmd::getCommand() {
     return command;
 }
 
-void Cmd::printFlags()   {
+/*void Cmd::printFlags()   {
 
     for(unsigned i=0; i<flags.size(); i++)  {
         cout << flags.at(i) << " ";

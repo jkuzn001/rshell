@@ -13,6 +13,7 @@ class Cmd: public Base {
     //constructors
     Cmd(char *command, queue<char*> flags);
     Cmd(char *command);
+    Cmd();
 
     void add_flag(char *a);
     //executes the command using the system calls fork
@@ -22,7 +23,7 @@ class Cmd: public Base {
 
 
     //For Debugging Purposes
-    //`string getCommand();
+    string getCommand();
 
     //void printFlags();
 };

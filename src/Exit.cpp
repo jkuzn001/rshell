@@ -4,7 +4,11 @@
 #include "Cmd.cpp"
 #include "Exit.h"
 
-Exit::Exit(): Cmd("exit") {}
+//Exit::Exit(): Cmd("exit") {}
+
+Exit::Exit()
+{}
+
 bool Exit::execute() {
     exit(0);
 }
