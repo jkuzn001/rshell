@@ -1,0 +1,17 @@
+echo hello #world
+ls -a || echo hello world #testing comments on multiple commands
+ps #exit
+echo test # || ls
+mkdir #test_directory
+mkdir test_directory #create a test directory
+rm -r test_directory #remove the directory
+echo test && echo test2 # echo both statements
+history || ps # ls -a
+ls -R #### test comment
+echo #commented echo test
+touch file.cpp #testing touch with a file name
+rm file.cpp #remove the file
+cat file.cpp #testing cat on empty file
+echo mkdir test_dir # echo test
+history -q # testing history with a flag
+exit

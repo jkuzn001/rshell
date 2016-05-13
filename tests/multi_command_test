@@ -1,0 +1,18 @@
+echo hello world || ls -a; ps
+ls -a && mkdir test_directory
+rm -r test_directory;ls
+history; ps
+echo "this is a test" || echo "the first test failed" && ls; ps && history
+mkdir test_directory2 && echo made test directory
+rm -r test_directory2; ls
+echo testing clear; clear
+echo || ls -m && echo testing || mkdir test_dir
+ps && ls -r
+cat nonexistantfile || echo testing invalid cat
+ls -q; ps
+touch test.cpp; echo created test.cpp && rm test.cpp
+echo || mkdir || ls
+ls -R && ps
+ps; ps || ls && ps
+ls -a || ls && ls
+exit
