@@ -15,9 +15,7 @@ bool OR::execute() {
             return false;
         }
     }
-    else {
-        return true;
-    }
+    return true;
 }
 
 
