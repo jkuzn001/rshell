@@ -7,12 +7,12 @@ using namespace std;
 
 class Cmd: public Base {
     private:
-    string command; //name of the command
-    vector<char*> flags; //vector holding the flags provided
+    char *command; //name of the command
+    queue<char*> flags; //vector holding the flags provided
     public:
     //constructors
-    Cmd(string command, vector<char*> flags);
-    Cmd(string command);
+    Cmd(char *command, queue<char*> flags);
+    Cmd(char *command);
 
     void add_flag(char *a);
     //executes the command using the system calls fork

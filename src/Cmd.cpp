@@ -9,6 +9,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -22,21 +23,21 @@ Cmd::Cmd(string command, vector<char*> flags)
 Cmd::Cmd(string command): command(command){}
 */
 
-Cmd::Cmd(string command, vector<char *> flags) {
+Cmd::Cmd(char* command, queue<char *> flags) {
     this->command = command;
     this->flags = flags;
 }
 
 
-Cmd::Cmd(string command) {
+Cmd::Cmd(char* command) {
     this->command = command;
-    vector<char*> temp;
+    queue<char*> temp;
     this->flags = temp;
 }
 
 
 void Cmd::add_flag(char*a) {
-    flags.push_back(a);
+    flags.push(a);
 }
 //For Debugging Purposes
 /*string Cmd::getCommand() {
@@ -55,13 +56,25 @@ void Cmd::printFlags()   {
 //and false if it fails
 bool Cmd::execute() {
     //c-string array to pass to execvp
-    flags.push_back(NULL);
+    //flags.push_back(NULL);
 
+    /*
     char *args[flags.size()+1];
-    for(int i=1; i<flags.size()+1; i++) {
+    for(unsigned i=1; i<flags.size()+1; i++) {
         args[i] = flags.at(i-1);
     }
+    */
 
+    flags.push(NULL);
+    int ctr = 1;
+    char *args[500];
+    while(flags.size() != 0) {
+        args[ctr] = flags.front();
+        flags.pop();
+        ctr++;
+    }
+
+    args[0] = command;
     //return value of the function
     //true if command executes
     bool ret = true;
@@ -71,7 +84,7 @@ bool Cmd::execute() {
         perror("fork");
     }
     else if (pid == 0) {
-        if(execvp(command.c_str(), args) == -1) {
+        if(execvp(args[0], args) == -1) {
             ret = false;
             perror("execvp");
             exit(1);
