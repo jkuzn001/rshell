@@ -49,6 +49,10 @@ rshell (Turtle Shell) Features
 
 Bugs
 ------------
+RShell (Turtle Shell) does not support quotes combined flags.
+* Normal Shell: cat "food in can" => cat: can't open food in cans
+* RShell (Turtle Shell): cat "food in can" => cat: "food: No such file or directory...cans": No such file or directory
+
 A bug was encountered where a child process would not properly exit on a failed call to execvp but this was fixed by changing the wait system call to waitpid and using the WEXITSTATUS macro to determine the success of the child process which was killed using the exit command.
 
 Authors
