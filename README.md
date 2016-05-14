@@ -1,5 +1,8 @@
-#rshell
-https://github.com/jkuzn001/rshell.git
+#RShell (Turtle Shell)
+Full Documentation of RShell (Turtle Shell) designs and coding strategies can be found in
+
+https://drive.google.com/open?id=0B63l6C_S7h9vTTU5UERYaWpPZFU
+
 Installation
 ------------
 Please run the following commands in terminal to run our rshell (Turtle Shell) on your computer
@@ -15,20 +18,24 @@ $ bin/rshell
 
 Introduction
 ------------
-This is the rshell project of Jacob Kuznicki and Lam Le for cs 100 spring 2016. It takes in commands (from bash and special comands such as exit) and connectors and executes them.  We accomplished this by using a composite design pattern connisting of connector class (which acts as the composite class) and a command class (which acts as the leaf).
+This is the rshell project of Jacob Kuznicki and Lam Le for CS 100 Spring 2016. It takes in commands (from bash and special comands such as exit) and connectors and executes them.  We accomplished this by using a composite design pattern consisting of connector class (which acts as the composite class) and a command class (which acts as the leaf).
 
 UML DIAGRAM
 ------------
 
 ![Alt text](UML_Diagram.png?raw=true "Optional Title")
 
-Execute based on Tree Representation
-------------
-![Alt text](tree.png?raw=true "Optional Title")
-
 Parsing with Tokens!!!
 ------------
+We used the C Token library to help us parse the user's string. From there we combined the Tokens to create both our Cmd's objects and Connector's objects
+
 ![Alt text](Tokens.png?raw=true "Optional Title")
+
+Execute based on Tree Representation
+------------
+From there we will construct a tree that will recursively call execute(), which will call execvp to run the specific commands and flags. Each iteration of a leaf will return a boolean value which will be evaluated by the Connectors to determine whether the tree should travel to the right leaf or skip and return back up the tree. 
+
+![Alt text](tree.png?raw=true "Optional Title")
 
 rshell (Turtle Shell) Features
 ------------
@@ -41,13 +48,10 @@ rshell (Turtle Shell) Features
 * "#" = Everything after "#" will be a comment.
 
 Bugs
--------
-Current Bugs:
-For example, the command "ls; echo Hello World && exit" will run the "ls" command and the "echo" command with the flag
-
+------------
 A bug was encountered where a child process would not properly exit on a failed call to execvp but this was fixed by changing the wait system call to waitpid and using the WEXITSTATUS macro to determine the success of the child process which was killed using the exit command.
 
 Authors
--------
+------------
 [Jacob Kuznicki]: https://github.com/jkuzn001
 [Lam Le]: https://github.com/lepatrick714
