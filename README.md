@@ -37,12 +37,6 @@ From there we will construct a tree that will recursively call execute(), which 
 
 ![Alt text](tree.png?raw=true "Optional Title")
 
-ScreenShots!!!
-------------
-
-
-
-
 rshell (Turtle Shell) Features
 ------------
 *Can run all bash commands within /bin
