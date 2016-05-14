@@ -5,7 +5,7 @@ https://drive.google.com/open?id=0B63l6C_S7h9vTTU5UERYaWpPZFU
 
 Installation
 ------------
-Please run the following commands in terminal to run our rshell (Turtle Shell) on your computer
+Please run the following commands in terminal to run our RShell (Turtle Shell) on your computer
 ```Installation
 $ git clone https://github.com/jkuzn001/rshell.git
 
@@ -18,7 +18,7 @@ $ bin/rshell
 
 Introduction
 ------------
-This is the rshell project of Jacob Kuznicki and Lam Le for CS 100 Spring 2016. It takes in commands (from bash and special comands such as exit) and connectors and executes them.  We accomplished this by using a composite design pattern consisting of connector class (which acts as the composite class) and a command class (which acts as the leaf).
+This is the RShell (Turtle Shell) project of Jacob Kuznicki and Lam Duy Le (aka Patrick Le) for CS 100 Spring 2016. It takes in commands (from bash and special comands such as exit) and connectors and executes them.  We accomplished this by using a composite design pattern consisting of connector class (which acts as the composite class) and a command class (which acts as the leaf).
 
 UML DIAGRAM
 ------------
@@ -53,5 +53,5 @@ A bug was encountered where a child process would not properly exit on a failed 
 
 Authors
 ------------
-[Jacob Kuznicki]: https://github.com/jkuzn001
-[Lam Le]: https://github.com/lepatrick714
+Jacob Kuznicki: https://github.com/jkuzn001
+Lam Duy Le (aka Patrick Le): https://github.com/lepatrick714
