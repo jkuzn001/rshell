@@ -54,4 +54,5 @@ A bug was encountered where a child process would not properly exit on a failed 
 Authors
 ------------
 Jacob Kuznicki: https://github.com/jkuzn001
+
 Lam Duy Le (aka Patrick Le): https://github.com/lepatrick714
