@@ -15,6 +15,7 @@ class Cmd: public Base {
     Cmd(char *command);
     Cmd();
 
+    //Adds a flag based on the container that is used (I.E. queue)
     void add_flag(char *a);
     //executes the command using the system calls fork
     //execvp and wait returns true if the command is executed

@@ -7,7 +7,8 @@ class Semicolon: public Connector {
     //constructors
     Semicolon(Base* lhs, Base* rhs);
     Semicolon();
-    //executes both of its children regardless of the success of the 
+
+    //executes both of its children regardless of the success of the
     //other child
     //returns true or false based on the success of the right child
     virtual bool execute();

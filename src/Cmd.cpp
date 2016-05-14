@@ -17,12 +17,6 @@ using namespace std;
 #include "Cmd.h"
 
 //constructors
-/*
-Cmd::Cmd(string command, vector<char*> flags)
-: command(command), flags(flags) {}
-Cmd::Cmd(string command): command(command){}
-*/
-
 Cmd::Cmd(char* command, queue<char *> flags) {
     this->command = command;
     this->flags = flags;
@@ -37,15 +31,18 @@ Cmd::Cmd(char* command) {
 
 Cmd::Cmd() {}
 
+//push any new flags into the queue<char *> flags
 void Cmd::add_flag(char*a) {
     flags.push(a);
 }
-//For Debugging Purposes
+
+//Used for the Exit Command to fix Exit bug
 string Cmd::getCommand() {
     return command;
 }
 
-/*void Cmd::printFlags()   {
+/*For Debugging Purposes
+void Cmd::printFlags()   {
 
     for(unsigned i=0; i<flags.size(); i++)  {
         cout << flags.at(i) << " ";
@@ -59,13 +56,6 @@ bool Cmd::execute() {
     //c-string array to pass to execvp
     //flags.push_back(NULL);
 
-    /*
-    char *args[flags.size()+1];
-    for(unsigned i=1; i<flags.size()+1; i++) {
-        args[i] = flags.at(i-1);
-    }
-    */
-
     flags.push(NULL);
     int ctr = 1;
     char *args[500];
@@ -75,34 +65,32 @@ bool Cmd::execute() {
         ctr++;
     }
 
-    args[0] = command;
+    args[0] = command; //Setting the Command to args[0] for execvp
     //return value of the function
     //true if command executes
     bool ret = true;
 
-    pid_t pid = fork();
-    if(pid == -1) {
-        perror("fork");
+    pid_t pid = fork();                         //Creating child process
+    if(pid == -1) {                             //if fork() fails
+        perror("fork");                         //run error checking
     }
-    else if (pid == 0) {
-        if(execvp(args[0], args) == -1) {
+    else if (pid == 0) {                        //Otherwise work on child process
+        if(execvp(args[0], args) == -1) {       //if child fail, perform error checking and return false and exit
             ret = false;
             perror("execvp");
             exit(1);
         }
     }
-    else if(pid > 0) {
+    else if(pid > 0) {                          //Otherwise continue to the parent process
        int status;
-       if(waitpid(pid,&status,0) == -1) {
+       if(waitpid(pid,&status,0) == -1) {       //pause the parent process
            perror("wait");
        }
-       if(WEXITSTATUS(status) == 1) {
+       if(WEXITSTATUS(status) == 1) {           //Zombiessssssssssssssss
            ret = false;
        }
 
     }
-    //delete[] args;
     return ret;
 }
-
 #endif

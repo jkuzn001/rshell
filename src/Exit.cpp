@@ -4,8 +4,7 @@
 #include "Cmd.cpp"
 #include "Exit.h"
 
-//Exit::Exit(): Cmd("exit") {}
-
+//Constructors
 Exit::Exit()
 {}
 
