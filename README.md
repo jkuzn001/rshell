@@ -47,6 +47,8 @@ RShell (Turtle Shell) Features
 * "&&" = If the current command succeeds, the following command will be executed.
 * "#" = Everything after "#" will be a comment.
 
+*User information work!!!
+Instead of having RShell (Turtle Shell) print a boring "$" before each command. Our RShell (Turtle Shell) can print out your entire user's info. For example, suppose your username is "Turtle" and that you're logged into the machine named "shellTheFirst", our RShell (Turtle Shell) will prompt "Turtle@shellTheFirst$ " on your terminal!
 Bugs
 ------------
 RShell (Turtle Shell) does not support quotes combined flags.
