@@ -10,7 +10,7 @@ ls -s
 echo ""
 touch testfile.cpp
 ls
-rm testfilec.pp
+rm testfile.cpp
 ps
 echo tests done
 exit
