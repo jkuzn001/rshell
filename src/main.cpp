@@ -96,12 +96,12 @@ int main(int argc, char**argv) {
 
         }
         else {
-
-            while(p!=0) {
-
+            bool commentDetected = false;
+            while(p!=0 && !commentDetected) {
                 //Check if the next token contains a #
                 char *commentP = (char *) memchr(p, '#', strlen(p));
                 if(commentP != NULL) {
+                    commentDetected = true;
                     break;
                 }
 
@@ -109,19 +109,20 @@ int main(int argc, char**argv) {
                 Cmd *testingCommand = new Cmd(p);
                 char *q = p;
 
-                if(!firstArgSemi) {
+                if(!firstArgSemi && !commentDetected) {
                     q = strtok(NULL, " ");  //Move on to check for the flags
 
-                    while(q!=0) {   //Keep checking for connectors while add flags.
+                    while(q!=0 && !commentDetected) {   //Keep checking for connectors while add flags.
                         bool checkConnectors = checkCon(q);     //check if Token is a connector
 
                         char *comment = (char *) memchr(q, '#', strlen(q)); //Special check for comments
                         if(comment != NULL) {           //Disregard everything if comment is found
-
+                            commentDetected = true;
                         }
                         else {
                             if(checkConnectors) {       //If token is not a Connector
                                 char *semi = (char *) memchr(q, ';', strlen(q));    //Check if ';' is in Token
+                                char *com = (char *) memchr(q, '#', strlen(q));     //Check if '#' is in Token
 
                                 //If so do the same algorithm except add the flag ';' to Cmd testingCommand
                                 if(semi != NULL) {
@@ -137,16 +138,28 @@ int main(int argc, char**argv) {
                                     connectorList.push(pushColon);
                                     break;
                                 }
-
+                                if(com != NULL) {
+                                    cout << "# found!" << endl;
+                                    commentDetected = true;
+                                    break;
+                                }
                                 //other wise just add the whole token as a flag
                                 else {
                                     testingCommand->add_flag(q);
                                 }
                             }
                             else {          //If token is a Connector
+                                char *com1 = (char *) memchr(q, '#', strlen(q));     //Check if '#' is in Token
+                                if(com1 != NULL) {
+                                    cout << "# found!" << endl;
+                                    commentDetected = true;
+                                    break;
+                                }
+
                                 if(!checkConnectors) {
                                     connectorList.push(q);  //push the token into the connectorList
                                 }
+
                                 break;
                             }
                         }
