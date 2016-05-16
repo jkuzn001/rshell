@@ -23,19 +23,19 @@ This is the RShell (Turtle Shell) project of Jacob Kuznicki and Lam Duy Le (aka 
 UML DIAGRAM
 ------------
 
-![Alt text](UML_Diagram.png?raw=true "Optional Title")
+![Alt text](/pictures/UML_Diagram.png?raw=true "Optional Title")
 
 Parsing with Tokens!!!
 ------------
 We used the C Token library to help us parse the user's string. From there we combined the Tokens to create both our Cmd's objects and Connector's objects
 
-![Alt text](Tokens.png?raw=true "Optional Title")
+![Alt text](/pictures/Tokens.png?raw=true "Optional Title")
 
 Execute based on Tree Representation
 ------------
-From there we will construct a tree that will recursively call execute(), which will call execvp to run the specific commands and flags. Each iteration of a leaf will return a boolean value which will be evaluated by the Connectors to determine whether the tree should travel to the right leaf or skip and return back up the tree. 
+From there we will construct a tree that will recursively call execute(), which will call execvp to run the specific commands and flags. Each iteration of a leaf will return a boolean value which will be evaluated by the Connectors to determine whether the tree should travel to the right leaf or skip and return back up the tree.
 
-![Alt text](tree.png?raw=true "Optional Title")
+![Alt text](/pictures/tree.png?raw=true "Optional Title")
 
 RShell (Turtle Shell) Features
 ------------
