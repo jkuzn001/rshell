@@ -44,8 +44,17 @@ int main(int argc, char**argv) {
         queue<char *> connectorList;            //Same here, but for Connectors ofc ^
         queue<Connector *> completedListToRun;  //This queue should only contain one tree of all the commmands
                                                 //and connectors respectively.
+        //Working on login info
+        char *userName = getlogin();            //Grab the user's name
+        if(!userName) {
+            perror("getlogin() error");         //Just in case you can't find it
+        }
 
-        cout << "$ ";                           //Prints the bash $
+        char hostName[1000];
+        gethostname(hostName, sizeof hostName); //Grab the machine name
+        //End of login info
+
+        cout << userName << "@" <<  hostName << "$ ";                           //Prints the bash $
 
         string userInput;                       //holds the user's input
         getline(cin, userInput);                //prompts the user to input a command and populates the string ^
