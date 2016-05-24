@@ -92,10 +92,8 @@ int main(int argc, char**argv) {
             firstArgSemi = true;
         }
 
-        if(checkingComment != NULL) {    //if there is a '#' in the first Token, disregard everything
+        if(checkingComment == NULL) {    //if there is a '#' in the first Token, disregard everything
 
-        }
-        else {
             bool commentDetected = false;
             while(p!=0 && !commentDetected) {
                 //Check if the next token contains a #
