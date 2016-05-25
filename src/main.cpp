@@ -19,6 +19,17 @@ using namespace std;
 #include "Semicolon.cpp"
 #include "Exit.cpp"
 
+void splitUpFirstCharacter(char* p) {
+
+    string tempP = string(p);
+    tempP = tempP.substr(1, tempP.size()-1);
+    strcpy(p, tempP.c_str());
+}
+
+
+
+
+
 /*checkCon() passes in a char * and returns a boolean value on whether or not q is a connector*/
 bool checkCon(char *q) {
     vector<string> s;
@@ -272,8 +283,6 @@ int main(int argc, char**argv) {
         char *cstr = new char[userInput.size()+1];                  //Initialize a C string array
         strcpy(cstr, userInput.c_str());                            //Parse the string into a *cstr
 
-        queue<Base *> precedenceTrees;
-
         /*
         if(checkingSemi != NULL) {                                        //if 1st Token == ';'
             //parse the Token to not include the ';'
@@ -291,14 +300,40 @@ int main(int argc, char**argv) {
             firstArgSemi = true;
         }*/
 
-        char *p = strtok(cstr, " ");                                //Initialize a array of Tokens
+        //Doing the Precedence Algorithm
+        queue<Base *> precedenceTrees;
+        queue<Connector *> outsideConnectors;
+        //char *p = strtok(cstr, " ");                                //Initialize a array of Tokens
         //p = strtok(NULL, " ");                                      //Then advance p
 
-        char *checkingComment = (char *) memchr(p, '#', strlen(p));       //check first Token for Comment
+        //char *checkingComment = (char *) memchr(p, ')', strlen(p));       //check first Token for Comment
+
+        size_t found = userInput.find('(');
+
+        if(found!=std::string::npos) {
+            string totalString = "";
+
+            char *p = strtok(cstr, " ");
 
 
-        Base* s =	grabTree(cstr);
-        s->execute();
+            while(p!=0) {
+                char *checkingPrecedence = (char *) memchr(p, '(', strlen(p));
+
+                while(checkingPrecedence != NULL) {
+                    totalString += "( ";
+                    splitUpFirstCharacter(p);
+                    checkingPrecedence = (char *) memchr(p, '(', strlen(p));
+                }
+                totalString += string(p);
+
+                break;
+            }
+            cout << totalString << endl;
+        }
+        else {
+            Base* s =	grabTree(cstr);
+            s->execute();
+        }
 
         delete[] cstr;  //Deallocate the memory
     }
