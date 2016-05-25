@@ -36,6 +36,7 @@ bool checkCon(char *q) {
 }
 
 Base* grabTree(char *cstr) {
+
     queue<Cmd* > commandList;               //Separates the Commands to create Cmd's objects respectively
     queue<char *> connectorList;            //Same here, but for Connectors ofc ^
     queue<Connector *> completedListToRun;  //This queue should only contain one tree of all the commmands
@@ -255,9 +256,9 @@ int main(int argc, char**argv) {
 
         char hostName[1000];
         gethostname(hostName, sizeof hostName); //Grab the machine name
-        //End of login info
 
         cout << userName << "@" <<  hostName << "$ ";                           //Prints the bash $
+        //End of login info
 
         string userInput;                       //holds the user's input
         getline(cin, userInput);                //prompts the user to input a command and populates the string ^
@@ -271,8 +272,33 @@ int main(int argc, char**argv) {
         char *cstr = new char[userInput.size()+1];                  //Initialize a C string array
         strcpy(cstr, userInput.c_str());                            //Parse the string into a *cstr
 
-		Base* s =	grabTree(cstr);
-		s->execute();
+        queue<Base *> precedenceTrees;
+
+        /*
+        if(checkingSemi != NULL) {                                        //if 1st Token == ';'
+            //parse the Token to not include the ';'
+            string tempP = string(p);
+            tempP = tempP.substr(0, tempP.size()-1);
+            strcpy(p, tempP.c_str());
+
+            //pushes the ';' into the ConnectorList
+            string semiCol = ";";
+            char *pushConnector = new char[2];
+            strcpy(pushConnector, semiCol.c_str());
+            connectorList.push(pushConnector);
+
+            //Set the boolean to true
+            firstArgSemi = true;
+        }*/
+
+        char *p = strtok(cstr, " ");                                //Initialize a array of Tokens
+        //p = strtok(NULL, " ");                                      //Then advance p
+
+        char *checkingComment = (char *) memchr(p, '#', strlen(p));       //check first Token for Comment
+
+
+        Base* s =	grabTree(cstr);
+        s->execute();
 
         delete[] cstr;  //Deallocate the memory
     }

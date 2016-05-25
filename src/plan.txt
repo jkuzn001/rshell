@@ -1,0 +1,30 @@
+Test command
+
+two ways to represent a test command
+$test -e test/file/path
+[ -e test/file/path ]
+
+Flags that will be a thing for the test command
+-e //Checks if the file/directory exists
+-f //Checks if the file/directory exists and is a regular file
+-d //Checks if the file/directory exists and is a directory
+
+if no flags has been specified, the -e functionality will be used by default.
+
+Remember to add an extra feature that the test command currently does not have
+if a command + flag + path returns a true value then print out (True) otherwise print out (False)
+
+Test comman should also work with the connectors
+
+
+
+
+
+Precedence Operators
+
+Example: $ (echo A && echo B) || (echo C && echo D)
+should print;
+A
+B
+
+
