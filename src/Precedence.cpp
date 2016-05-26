@@ -1,12 +1,14 @@
-#ifndef __PARENTHESIS_CPP__
-#define __PARENTHESIS_CPP__
+#ifndef __PRECEDENCE_CPP__
+#define __PRECEDENCE_CPP__
 
 #include "Base.h"
 
-class Parenthesis: public Base {
+class Precedence: public Base {
     private:
     Base* child;
     public:
+    Precedence(Base* c): child(c) {}
+    Precedence(): child(NULL) {}
     virtual bool execute() {
         return child->execute();
     }

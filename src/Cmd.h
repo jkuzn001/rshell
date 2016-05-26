@@ -2,6 +2,7 @@
 #define __CMD_H__
 
 #include <queue>
+#include <string>
 using namespace std;
 #include "Base.h"
 
