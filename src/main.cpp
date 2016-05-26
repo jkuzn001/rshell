@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -26,9 +27,24 @@ void splitUpFirstCharacter(char* p) {
     strcpy(p, tempP.c_str());
 }
 
+void splitUpLastCharacter(char* p) {
+    string tempP = string(p);
+    size_t comments = tempP.find('#');
+    size_t comma = tempP.find(';');
+    if(comma!=std::string::npos || comments!=std::string::npos) {
+        tempP.erase(tempP.end()-2);
+    }
+    else {
+        tempP.erase(tempP.end()-1);
+    }
+    strcpy(p, tempP.c_str());
+}
 
-
-
+void splitUpLastCharacterAlways(char *p) {
+    string tempP = string(p);
+    tempP.erase(tempP.end()-1);
+    strcpy(p, tempP.c_str());
+}
 
 /*checkCon() passes in a char * and returns a boolean value on whether or not q is a connector*/
 bool checkCon(char *q) {
@@ -38,11 +54,22 @@ bool checkCon(char *q) {
     //Note that ; and # are not included because they have special parsing properties
 
     //Go through the vector of connectors and check if char *q is equal to any of the connectors
-    for(unsigned i=0; i<s.size(); i++) {
-        if(q == s.at(i)) {
+    for(unsigned i=0; i<s.size(); i++)
+        if(q == s.at(i))
             return false;
-        }
-    }
+    return true;
+}
+
+bool checkAllCon(char *q) {
+    vector<string> s;
+    s.push_back("&&");
+    s.push_back("||");
+    s.push_back("#");
+    s.push_back(";");
+
+    for(unsigned i=0; i<s.size(); i++)
+        if(q == s.at(i))
+            return false;
     return true;
 }
 
@@ -283,30 +310,12 @@ int main(int argc, char**argv) {
         char *cstr = new char[userInput.size()+1];                  //Initialize a C string array
         strcpy(cstr, userInput.c_str());                            //Parse the string into a *cstr
 
-        /*
-        if(checkingSemi != NULL) {                                        //if 1st Token == ';'
-            //parse the Token to not include the ';'
-            string tempP = string(p);
-            tempP = tempP.substr(0, tempP.size()-1);
-            strcpy(p, tempP.c_str());
-
-            //pushes the ';' into the ConnectorList
-            string semiCol = ";";
-            char *pushConnector = new char[2];
-            strcpy(pushConnector, semiCol.c_str());
-            connectorList.push(pushConnector);
-
-            //Set the boolean to true
-            firstArgSemi = true;
-        }*/
-
         //Doing the Precedence Algorithm
         queue<Base *> precedenceTrees;
         queue<Connector *> outsideConnectors;
         //char *p = strtok(cstr, " ");                                //Initialize a array of Tokens
         //p = strtok(NULL, " ");                                      //Then advance p
 
-        //char *checkingComment = (char *) memchr(p, ')', strlen(p));       //check first Token for Comment
 
         size_t found = userInput.find('(');
 
@@ -317,18 +326,106 @@ int main(int argc, char**argv) {
 
 
             while(p!=0) {
-                char *checkingPrecedence = (char *) memchr(p, '(', strlen(p));
+                char *checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
+                char *checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
 
-                while(checkingPrecedence != NULL) {
-                    totalString += "( ";
-                    splitUpFirstCharacter(p);
-                    checkingPrecedence = (char *) memchr(p, '(', strlen(p));
+                if(checkingPrecedenceF != NULL) {
+                    while(checkingPrecedenceF != NULL) {
+                        totalString += "( ";
+                        splitUpFirstCharacter(p);
+                        checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
+                    }
                 }
-                totalString += string(p);
 
-                break;
+                int totalEndingPrecedence = 0;
+                if(checkingPrecedenceE != NULL) {
+                    while(checkingPrecedenceE != NULL) {
+                        totalEndingPrecedence++;
+                        splitUpLastCharacter(p);
+                        checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
+                    }
+
+                    char *checkingComma = (char *) memchr(p, ';', strlen(p));
+                    char *checkingComment = (char *) memchr(p, '#', strlen(p));
+
+                    if(checkingComma != NULL || checkingComment != NULL) {
+                        splitUpLastCharacterAlways(p);
+                        totalString += string(p);
+                        totalString += " ";
+                        for(unsigned i=0; i<totalEndingPrecedence; i++) {
+                            totalString += ") ";
+                        }
+                        if(checkingComma != NULL) {
+                            totalString += "; ";
+                        }
+                        else {
+                            totalString += "# ";
+                        }
+                    }
+                    else {
+                        totalString += string(p);
+                        totalString += " ";
+                        for(unsigned i=0; i<totalEndingPrecedence; i++) {
+                            totalString += ") ";
+                        }
+                    }
+                }
+                else {
+                    totalString += string(p);
+                    totalString += " ";
+                }
+
+                p = strtok(NULL, " ");
             }
             cout << totalString << endl;
+
+            //Separating stuff
+            char *totalChar = new char[totalString.size()+1];                  //Initialize a C string array
+            strcpy(totalChar, totalString.c_str());                            //Parse the string into a *cstr
+
+            char *c = strtok(totalChar, " ");
+            stack<char *> stringStack;                              //Used to separate to different strings
+            queue<string> branches;
+            queue<char *> connectors;
+
+            int startPrecedence = 0;
+            int endPrecedence = 0;
+
+            //Second Pass
+            while(c!=0) {
+                char *beginPrecedence = (char *) memchr(c, '(', strlen(c));
+                char *endPrecedence = (char *) memchr(c, ')', strlen(c));
+
+                if(beginPrecedence != NULL) {
+                    startPrecedence++;
+                    cout << "Pushing: " << c << endl;
+                    stringStack.push(c);
+                }
+                else if(endPrecedence != NULL) {
+                    startPrecedence--;
+
+                }
+                else {
+                    cout << "Pushing: " << c << endl;
+                    stringStack.push(c);
+                }
+
+
+
+
+
+
+
+                bool checkConnectors = checkAllCon(c);     //check if Token is a connector
+
+                if(!checkConnectors && startPrecedence == 0) {
+                    cout << "Pushing Connector: " << c << endl;
+                    connectors.push(c);
+                }
+
+                c = strtok(NULL, " ");
+            }
+
         }
         else {
             Base* s =	grabTree(cstr);
