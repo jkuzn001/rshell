@@ -24,5 +24,4 @@ bool AND::execute() {
         return false;
      }
 }
-
 #endif
