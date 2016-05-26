@@ -1,17 +1,18 @@
 #ifndef __CMD_H__
 #define __CMD_H__
 
-#include <vector>
+#include <queue>
 using namespace std;
 #include "Base.h"
 
 class Cmd: public Base {
-    private:
+    protected:
     char *command; //name of the command
     queue<char*> flags; //vector holding the flags provided
     public:
     //constructors
     Cmd(char *command, queue<char*> flags);
+    Cmd(queue<char*> flags);
     Cmd(char *command);
     Cmd();
 

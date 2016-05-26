@@ -22,6 +22,9 @@ Cmd::Cmd(char* command, queue<char *> flags) {
     this->flags = flags;
 }
 
+Cmd::Cmd(queue<char*> flags) {
+    this->flags = flags;
+}
 
 Cmd::Cmd(char* command) {
     this->command = command;
@@ -86,7 +89,7 @@ bool Cmd::execute() {
        if(waitpid(pid,&status,0) == -1) {       //pause the parent process
            perror("wait");
        }
-       if(WEXITSTATUS(status) == 1) {           //Zombiessssssssssssssss
+       if(WEXITSTATUS(status) != 0) {           //Zombiessssssssssssssss
            ret = false;
        }
 
