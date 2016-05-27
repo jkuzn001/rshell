@@ -389,6 +389,7 @@ int main(int argc, char**argv) {
             queue<string> branches;
             queue<char *> connectors;
 
+            bool connectorWithinPrecedence = false;
             //Second Pass
             while(c!=0) {
                 char *beginPrecedence = (char *) memchr(c, '(', strlen(c));
@@ -396,9 +397,34 @@ int main(int argc, char**argv) {
                 bool checkConnectors = checkAllCon(c);     //check if Token is a connector
 
                 if(beginPrecedence != NULL) {
+                    if(!stringStack.empty()) {
+                        string testBefore = stringStack.top();
+
+                        if(testBefore.compare("(") != 0) {
+                            stack<string> s;
+
+                            while(!stringStack.empty()) {
+                                s.push( string(stringStack.top()) );
+                                stringStack.pop();
+                            }
+                            //cout << "Printing something: " << s << endl;
+                            string completedStringBranch;
+
+                            while(!s.empty()) {
+                                completedStringBranch += string(s.top());
+                                completedStringBranch += " ";
+                                s.pop();
+                            }
+
+
+                            branches.push(completedStringBranch);
+                        }
+                    }
+                    connectorWithinPrecedence = true;
                     stringStack.push(c);
                 }
                 else if(endPrecedence != NULL) {
+                    connectorWithinPrecedence = false;
                     stack<char *> tempStringStack;
 
                     while(!stringStack.empty()) {
@@ -406,7 +432,7 @@ int main(int argc, char**argv) {
                         char *checkBeginPrecedence = (char *) memchr(tempChar, '(', strlen(tempChar));
 
                         if(checkBeginPrecedence != NULL) {
-                            //cout << "found: (" << endl;
+                            stringStack.pop();
                             break;
                         }
 
@@ -421,22 +447,173 @@ int main(int argc, char**argv) {
                         completedStringBranch += " ";
                         tempStringStack.pop();
                     }
-
+                    //cout << completedStringBranch << endl;
                     branches.push(completedStringBranch);
                 }
-                else if(!checkConnectors) {
+                else if(!checkConnectors && !connectorWithinPrecedence) {
                     connectors.push(c);
+                    //cout << c << endl;
                 }
                 else {
-                    cout << "PUshing: " << c << endl;
+                    //cout << "PUshing: " << c << endl;
                     stringStack.push(c);
                 }
 
 
                 c = strtok(NULL, " ");
             }
+
             queue<Base *> treeBranches;
 
+            //cout << branches.size() << endl;
+            while(!branches.empty()) {
+                if(branches.front().size() < 1) {
+                    branches.pop();
+                }
+                else {
+                    char *tr = new char[branches.front().size()+1];
+                    strcpy(tr, branches.front().c_str());
+
+                    cout << tr << endl;
+                    Base* s = grabTree(tr);
+                    treeBranches.push(s);
+                    branches.pop();
+                }
+            }
+
+            /*queue<Connector *> completedListToRun;
+            if(connectors.size() > 0) {
+                string AND_STRING = "&&";
+                string OR_STRING = "||";
+                string SEMI_STRING = ";";
+
+                Base *lhs = treeBranches.front();
+                treeBranches.pop();
+                Base *rhs = treeBranches.front();
+                treeBranches.pop();
+
+                char *temp = connectors.front();
+                connectors.pop();
+
+                if(temp == AND_STRING) {
+                    AND *n = new AND(lhs, rhs);
+                    completedListToRun.push(n);
+                }
+                if(temp == OR_STRING) {
+                    OR *n = new OR(lhs, rhs);
+                    completedListToRun.push(n);
+                }
+                if(temp == SEMI_STRING) {
+                    Semicolon *n = new Semicolon(lhs, rhs);
+                    completedListToRun.push(n);
+                }
+
+
+                while(connectors.size() != 0) {
+                    Base *tempLHS = completedListToRun.front();
+                    completedListToRun.pop();
+                    Base *rhs = treeBranches.front();
+                    treeBranches.pop();
+
+                    char *temp2 = connectors.front();
+                    connectors.pop();
+                    if(temp2 == AND_STRING) {
+                        AND *n = new AND(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                    else if(temp2 == OR_STRING) {
+                        OR *n = new OR(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                    else if(temp2 == SEMI_STRING) {
+                        Semicolon *n = new Semicolon(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                }
+                Base *singleRun = completedListToRun.front();
+                completedListToRun.pop();
+                singleRun->execute();
+
+            }
+            else {
+
+                if(treeBranches.size() != 1) {   //MAKE SURE THAT THERE IS ONLY ONE CMD
+                    cout << "Error commandList has more than 1 Cmd*" << endl;
+                    exit(1);
+                }
+                else {
+                    Base *temporaryCmd = treeBranches.front();
+                    treeBranches.pop();
+                    temporaryCmd->execute();
+                }
+            }*/
+/*//Construction of tree execution
+        if(connectorList.size() > 0) { //Only runs when there are 2 or more commands
+            string AND_STRING = "&&";
+            string OR_STRING = "||";
+            string SEMI_STRING = ";";
+
+            Cmd *lhs = commandList.front();
+            commandList.pop();
+            Cmd *rhs = commandList.front();
+            commandList.pop();
+
+            char *temp = connectorList.front();
+            connectorList.pop();
+
+            if(temp == AND_STRING) {
+                AND *n = new AND(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            if(temp == OR_STRING) {
+                OR *n = new OR(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            if(temp == SEMI_STRING) {
+                Semicolon *n = new Semicolon(lhs, rhs);
+                completedListToRun.push(n);
+            }
+
+            while(connectorList.size() != 0) {
+                Connector *tempLHS = completedListToRun.front();
+                completedListToRun.pop();
+                Cmd *rhs = commandList.front();
+                commandList.pop();
+
+                char *temp2 = connectorList.front();
+                connectorList.pop();
+                if(temp2 == AND_STRING) {
+                    AND *n = new AND(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp2 == OR_STRING) {
+                    OR *n = new OR(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp2 == SEMI_STRING) {
+                    Semicolon *n = new Semicolon(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+
+            }
+
+            Connector *singleRun = completedListToRun.front();
+            completedListToRun.pop();
+            return singleRun;
+
+        }
+        else {  //If there are no connectors then there must only be one cmd and/or a bunch of flags
+            if(commandList.size() != 1) {   //MAKE SURE THAT THERE IS ONLY ONE CMD
+                cout << "Error commandList has more than 1 Cmd*" << endl;
+                exit(1);
+            }
+            else {
+                Cmd *temporaryCmd = commandList.front();
+                commandList.pop();
+                return temporaryCmd;
+            }
+        }
+*/
         }
         else {
             Base* s =	grabTree(cstr);
