@@ -377,54 +377,65 @@ int main(int argc, char**argv) {
 
                 p = strtok(NULL, " ");
             }
-            cout << totalString << endl;
+            //cout << totalString << endl;
 
             //Separating stuff
             char *totalChar = new char[totalString.size()+1];                  //Initialize a C string array
             strcpy(totalChar, totalString.c_str());                            //Parse the string into a *cstr
 
             char *c = strtok(totalChar, " ");
+
             stack<char *> stringStack;                              //Used to separate to different strings
             queue<string> branches;
             queue<char *> connectors;
-
-            int startPrecedence = 0;
-            int endPrecedence = 0;
 
             //Second Pass
             while(c!=0) {
                 char *beginPrecedence = (char *) memchr(c, '(', strlen(c));
                 char *endPrecedence = (char *) memchr(c, ')', strlen(c));
+                bool checkConnectors = checkAllCon(c);     //check if Token is a connector
 
                 if(beginPrecedence != NULL) {
-                    startPrecedence++;
-                    cout << "Pushing: " << c << endl;
                     stringStack.push(c);
                 }
                 else if(endPrecedence != NULL) {
-                    startPrecedence--;
+                    stack<char *> tempStringStack;
 
+                    while(!stringStack.empty()) {
+                        char *tempChar = stringStack.top();
+                        char *checkBeginPrecedence = (char *) memchr(tempChar, '(', strlen(tempChar));
+
+                        if(checkBeginPrecedence != NULL) {
+                            //cout << "found: (" << endl;
+                            break;
+                        }
+
+                        tempStringStack.push(stringStack.top());
+                        //cout << "Pushing into stack: " << stringStack.top() << endl;
+                        stringStack.pop();
+                    }
+
+                    string completedStringBranch;
+                    while(!tempStringStack.empty()) {
+                        completedStringBranch += string(tempStringStack.top());
+                        completedStringBranch += " ";
+                        tempStringStack.pop();
+                    }
+
+                    branches.push(completedStringBranch);
+                }
+                else if(!checkConnectors) {
+                    connectors.push(c);
                 }
                 else {
-                    cout << "Pushing: " << c << endl;
+                    cout << "PUshing: " << c << endl;
                     stringStack.push(c);
                 }
 
 
-
-
-
-
-
-                bool checkConnectors = checkAllCon(c);     //check if Token is a connector
-
-                if(!checkConnectors && startPrecedence == 0) {
-                    cout << "Pushing Connector: " << c << endl;
-                    connectors.push(c);
-                }
-
                 c = strtok(NULL, " ");
             }
+            queue<Base *> treeBranches;
 
         }
         else {
