@@ -389,7 +389,7 @@ int main(int argc, char**argv) {
             queue<char *> connectors;
 
             bool withinPrecedence = false;                          //Used for connectors.
-            bool newPrecedence = true;                             //Whether or not in a closed area.
+            bool newPrecedence = false;                             //Whether or not in a closed area.
             //newPrecedence true = within a closed area. false != within a closed area
             //Second Pass
             while(c!=0) {
@@ -422,7 +422,7 @@ int main(int argc, char**argv) {
                             finalString += " ";
                             currentString.pop();
                         }
-                        cout << finalString << endl;
+                        //cout << finalString << endl;
                         if(finalString.size() > 0) {
                             branches.push(finalString);
                         }
@@ -454,17 +454,17 @@ int main(int argc, char**argv) {
                         finalString += " ";
                         currentString.pop();
                     }
-                    cout << finalString << endl;
+                    //cout << finalString << endl;
                     if(finalString.size() > 0) {
                         branches.push(finalString);
                     }
                 }
                 else if(!checkConnectors && !withinPrecedence) {
-                    cout << "Outside Connectors: " << c << endl;
+                    //cout << "Outside Connectors: " << c << endl;
                     connectors.push(c);
                 }
                 else {
-                    cout << "Pushing into stringStack: " << c << endl;
+                    //cout << "Pushing into stringStack: " << c << endl;
                     stringStack.push(c);
                 }
                 c = strtok(NULL, " ");
@@ -498,10 +498,10 @@ int main(int argc, char**argv) {
                 connectors.pop();
             }
             */
-
             queue<Base *> commandTreeList;
 
             while(!branches.empty()) {
+                //cout << branches.front() << endl;
                 char *r = new char[branches.front().size()+1];
                 strcpy(r, branches.front().c_str());
 
@@ -513,6 +513,7 @@ int main(int argc, char**argv) {
 
             if(connectors.size() > 0) {
                 queue<Connector *>completedListToRun;
+
                 Base* lhs = commandTreeList.front();
                 commandTreeList.pop();
                 Base* rhs = commandTreeList.front();
@@ -534,7 +535,7 @@ int main(int argc, char**argv) {
                     completedListToRun.push(n);
                 }
 
-                while(connectors.size() > 1) {
+                while(connectors.size() > 0) {
                     Connector *tempLHS = completedListToRun.front();
                     completedListToRun.pop();
                     Base *rhs = commandTreeList.front();
@@ -556,30 +557,6 @@ int main(int argc, char**argv) {
                         completedListToRun.push(n);
                     }
                 }
-
-/*            while(connectorList.size() != 0) {
-                Connector *tempLHS = completedListToRun.front();
-                completedListToRun.pop();
-                Cmd *rhs = commandList.front();
-                commandList.pop();
-
-                char *temp2 = connectorList.front();
-                connectorList.pop();
-                if(temp2 == AND_STRING) {
-                    AND *n = new AND(tempLHS, rhs);
-                    completedListToRun.push(n);
-                }
-                else if(temp2 == OR_STRING) {
-                    OR *n = new OR(tempLHS, rhs);
-                    completedListToRun.push(n);
-                }
-                else if(temp2 == SEMI_STRING) {
-                    Semicolon *n = new Semicolon(tempLHS, rhs);
-                    completedListToRun.push(n);
-                }
-
-            }
-*/
 
                 Connector *singleRun = completedListToRun.front();
                 completedListToRun.pop();
