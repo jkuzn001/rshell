@@ -20,6 +20,8 @@ Introduction
 ------------
 This is the RShell (Turtle Shell) project of Jacob Kuznicki and Lam Duy Le (aka Patrick Le) for CS 100 Spring 2016. It takes in commands (from bash and special comands such as exit) and connectors and executes them.  We accomplished this by using a composite design pattern consisting of connector class (which acts as the composite class) and a command class (which acts as the leaf).
 
+For the second part of this assignment we added some functionality to our Rshell.  We added in the test command that can be called using either the command "test" or by using [].  This command will test if a given file or directory exists in a given path.  The test command's behavior can be augmented by giving it one of the following flags: -e tests if the file or directory exists (is assumed if no flag is provided), -f tests if the file or directory given is a regular file, -d tests if the file or directory given is a directory.  We also added in precedence of commands with ().  We accomplished this by adding a parenthesis decorator into our system that holds a pointer to a subtree of commands that is created from the contents of the parenthesis.
+
 UML DIAGRAM
 ------------
 

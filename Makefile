@@ -27,5 +27,11 @@ Semicolon:
 Exit:
 	$(CC) $(CFLAGS) ./src/Exit.cpp
 
+Test:
+	$(CC) $(CFLAGS) ./src/Test.cpp
+
+Precedence:
+	$(CC) $(CFLAGS) ./src/Precedence.cpp
+
 clean:
 	rm -rf ./bin

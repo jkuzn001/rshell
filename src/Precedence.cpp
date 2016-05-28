@@ -3,6 +3,10 @@
 
 #include "Base.h"
 
+#include <cstdlib>
+
+using namespace std;
+
 class Precedence: public Base {
     private:
     Base* child;
