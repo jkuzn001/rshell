@@ -352,7 +352,7 @@ int main(int argc, char**argv) {
                         splitUpLastCharacterAlways(p);
                         totalString += string(p);
                         totalString += " ";
-                        for(unsigned i=0; i<totalEndingPrecedence; i++) {
+                        for(int i=0; i<totalEndingPrecedence; i++) {
                             totalString += ") ";
                         }
                         if(checkingComma != NULL) {
@@ -365,7 +365,7 @@ int main(int argc, char**argv) {
                     else {
                         totalString += string(p);
                         totalString += " ";
-                        for(unsigned i=0; i<totalEndingPrecedence; i++) {
+                        for(int i=0; i<totalEndingPrecedence; i++) {
                             totalString += ") ";
                         }
                     }
@@ -424,7 +424,9 @@ int main(int argc, char**argv) {
                             currentString.pop();
                         }
                         //cout << finalString << endl;
-                        branches.push(finalString);
+                        if(finalString.size() > 0) {
+                            branches.push(finalString);
+                        }
                     }
                     newPrecedence = true;
                 }
@@ -453,7 +455,9 @@ int main(int argc, char**argv) {
                         currentString.pop();
                     }
                     //cout << finalString << endl;
-                    branches.push(finalString);
+                    if(finalString.size() > 0) {
+                        branches.push(finalString);
+                    }
                 }
                 else if(!checkConnectors && !withinPrecedence) {
                     //cout << "Outside Connectors: " << c << endl;
@@ -484,6 +488,7 @@ int main(int argc, char**argv) {
                 branches.push(leftOvers);
             }
 
+            /*
             while(!branches.empty()) {
                 cout << branches.front() << endl;
                 branches.pop();
@@ -492,6 +497,7 @@ int main(int argc, char**argv) {
                 cout << connectors.front() << endl;
                 connectors.pop();
             }
+            */
         }
         else {
             Base* s =	grabTree(cstr);
