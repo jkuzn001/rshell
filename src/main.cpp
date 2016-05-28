@@ -20,6 +20,10 @@ using namespace std;
 #include "Semicolon.cpp"
 #include "Exit.cpp"
 
+const string AND_STRING = "&&";
+const string OR_STRING = "||";
+const string SEMI_STRING = ";";
+
 void splitUpFirstCharacter(char* p) {
 
     string tempP = string(p);
@@ -196,11 +200,6 @@ Base* grabTree(char *cstr) {
 
         //Construction of tree execution
         if(connectorList.size() > 0) { //Only runs when there are 2 or more commands
-            //Instances of AND, OR, and SEMICOLONS
-            string AND_STRING = "&&";
-            string OR_STRING = "||";
-            string SEMI_STRING = ";";
-
             //Pop the first two commands out of the commandList
             Cmd *lhs = commandList.front();
             commandList.pop();
@@ -498,6 +497,65 @@ int main(int argc, char**argv) {
                 connectors.pop();
             }
             */
+
+            queue<Base *> commandTreeList;
+
+            while(!branches.empty()) {
+                char *r = new char[branches.front().size()+1];
+                strcpy(r, branches.front().c_str());
+
+                branches.pop();
+                Base* tree = grabTree(r);
+                commandTreeList.push(tree);
+
+                //tree->execute();
+            }
+
+            if(connectors.size() > 1) {
+                queue<Connector *>completedListToRun;
+                Base* lhs = commandTreeList.front();
+                commandTreeList.pop();
+                Base* rhs = commandTreeList.front();
+                commandTreeList.poP();
+
+                char *temp = connectors.front();
+                connectors.pop();
+
+                if(temp == AND_STRING) {
+                    AND *n = new AND(lhs, rhs);
+
+                }
+            /*
+            //Pop a connector of the connectorList
+            char *temp = connectorList.front();
+            connectorList.pop();
+
+            //Check what the connector is and create a object respectively
+            //and push it to the completedListToRun
+            if(temp == AND_STRING) {
+                AND *n = new AND(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            if(temp == OR_STRING) {
+                OR *n = new OR(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            if(temp == SEMI_STRING) {
+                Semicolon *n = new Semicolon(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            */
+            }
+            else {
+                Base* s = commandTreeList.front();
+                commandTreeList.pop();
+                if(commandTreeList.size() != 0) {
+                    cout << "Error" << endl;
+                    exit(1);
+                }
+
+                s->execute();
+            }
         }
         else {
             Base* s =	grabTree(cstr);
