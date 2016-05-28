@@ -507,48 +507,87 @@ int main(int argc, char**argv) {
                 branches.pop();
                 Base* tree = grabTree(r);
                 commandTreeList.push(tree);
-
                 //tree->execute();
             }
 
-            if(connectors.size() > 1) {
+            if(connectors.size() > 0) {
                 queue<Connector *>completedListToRun;
                 Base* lhs = commandTreeList.front();
                 commandTreeList.pop();
                 Base* rhs = commandTreeList.front();
-                commandTreeList.poP();
+                commandTreeList.pop();
 
                 char *temp = connectors.front();
                 connectors.pop();
 
                 if(temp == AND_STRING) {
                     AND *n = new AND(lhs, rhs);
-
+                    completedListToRun.push(n);
                 }
-            /*
-            //Pop a connector of the connectorList
-            char *temp = connectorList.front();
-            connectorList.pop();
+                else if(temp == OR_STRING) {
+                    OR *n = new OR(lhs, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp == SEMI_STRING) {
+                    Semicolon *n = new Semicolon(lhs, rhs);
+                    completedListToRun.push(n);
+                }
 
-            //Check what the connector is and create a object respectively
-            //and push it to the completedListToRun
-            if(temp == AND_STRING) {
-                AND *n = new AND(lhs, rhs);
-                completedListToRun.push(n);
+                while(connectors.size() > 1) {
+                    Connector *tempLHS = completedListToRun.front();
+                    completedListToRun.pop();
+                    Base *rhs = commandTreeList.front();
+                    commandTreeList.pop();
+
+                    char *temp2 = connectors.front();
+                    connectors.pop();
+
+                    if(temp2 == AND_STRING) {
+                        AND *n = new AND(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                    else if(temp2 == OR_STRING) {
+                        OR *n = new OR(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                    else if(temp2 == SEMI_STRING) {
+                        Semicolon *n = new Semicolon(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                }
+
+/*            while(connectorList.size() != 0) {
+                Connector *tempLHS = completedListToRun.front();
+                completedListToRun.pop();
+                Cmd *rhs = commandList.front();
+                commandList.pop();
+
+                char *temp2 = connectorList.front();
+                connectorList.pop();
+                if(temp2 == AND_STRING) {
+                    AND *n = new AND(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp2 == OR_STRING) {
+                    OR *n = new OR(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp2 == SEMI_STRING) {
+                    Semicolon *n = new Semicolon(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+
             }
-            if(temp == OR_STRING) {
-                OR *n = new OR(lhs, rhs);
-                completedListToRun.push(n);
-            }
-            if(temp == SEMI_STRING) {
-                Semicolon *n = new Semicolon(lhs, rhs);
-                completedListToRun.push(n);
-            }
-            */
-            }
-            else {
+*/
+
+                Connector *singleRun = completedListToRun.front();
+                completedListToRun.pop();
+                singleRun->execute();
+           }
+           else {
                 Base* s = commandTreeList.front();
                 commandTreeList.pop();
+
                 if(commandTreeList.size() != 0) {
                     cout << "Error" << endl;
                     exit(1);
