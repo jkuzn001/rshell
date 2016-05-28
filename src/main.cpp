@@ -376,7 +376,7 @@ int main(int argc, char**argv) {
 
                 p = strtok(NULL, " ");
             }
-            cout << totalString << endl;
+            //cout << totalString << endl;
 
             //Separating stuff
             char *totalChar = new char[totalString.size()+1];                  //Initialize a C string array
@@ -422,11 +422,12 @@ int main(int argc, char**argv) {
                             finalString += " ";
                             currentString.pop();
                         }
-                        //cout << finalString << endl;
+                        cout << finalString << endl;
                         if(finalString.size() > 0) {
                             branches.push(finalString);
                         }
                     }
+
                     newPrecedence = true;
                 }
                 else if(endPrecedence != NULL) {
@@ -453,17 +454,17 @@ int main(int argc, char**argv) {
                         finalString += " ";
                         currentString.pop();
                     }
-                    //cout << finalString << endl;
+                    cout << finalString << endl;
                     if(finalString.size() > 0) {
                         branches.push(finalString);
                     }
                 }
                 else if(!checkConnectors && !withinPrecedence) {
-                    //cout << "Outside Connectors: " << c << endl;
+                    cout << "Outside Connectors: " << c << endl;
                     connectors.push(c);
                 }
                 else {
-                    //cout << "Pushing into stringStack: " << c << endl;
+                    cout << "Pushing into stringStack: " << c << endl;
                     stringStack.push(c);
                 }
                 c = strtok(NULL, " ");
