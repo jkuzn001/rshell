@@ -1,0 +1,13 @@
+test -e Base.h && echo Base.h exists
+[ -e Base.h ] && echo Base.h exists
+test -d Base.h || echo directory Base.h does not exist
+[ -f Base.h ] && echo file Base.h exists
+mkdir testpath
+touch testfile.cpp
+test -d testpath && echo directory testpath exists
+test -f testfile.cpp && echo file testfile.cpp exists
+rm testfile.cpp
+rm -r testpath
+[ -d testpath ] || echo directory testpath does not exist
+test -f testfile.cpp || echo file testfile.cpp does not exist
+exit

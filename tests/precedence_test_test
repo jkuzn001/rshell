@@ -1,0 +1,11 @@
+(echo hello world)
+(echo hello world && ls -a) || echo A
+echo A || (ls -R && ls -a) || echo B
+(ps && ls) || (echo A && echo B)
+(echo A) || (echo B)
+((echo A && echo B) || (echo C && echo D)) && ls -a
+(echo A && echo B) || (echo C && echo D)
+((ls) || (ps)) && mkdir testdir && echo created test directory
+(ls && rm -r testdir) && echo removed test directory
+(ps;ls) || (ls)
+exit
