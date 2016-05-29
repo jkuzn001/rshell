@@ -114,10 +114,18 @@ Base* grabTree(char *cstr) {
         p = strtok(NULL, " ");
         Test *c = new Test();
 
-        c->add_flag(p);
-        p = strtok(NULL, " ");
-        c->add_flag(p);
-        p = strtok(NULL, " ");
+        char *checkFlag = (char *) memchr(p, '-', strlen(p));
+        if(checkFlag != NULL) {
+            //cout << p << endl;
+            c->add_flag(p);
+            p = strtok(NULL, " ");
+            c->add_flag(p);
+            p = strtok(NULL, " ");
+        }
+        else {
+            c->add_flag(p);
+            p = strtok(NULL, " ");
+        }
 
         commandList.push(c);
 
