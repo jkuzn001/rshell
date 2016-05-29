@@ -92,6 +92,8 @@ Base* grabTree(char *cstr) {
     char *checkingComment = (char *) memchr(p, '#', strlen(p));       //check first Token for Comment
     char *checkingTest = (char *) memchr(p, '[', strlen(p));          //check first Token for Test
 
+    string checkingStringTest = string(p);
+
     if(checkingSemi != NULL) {                                        //if 1st Token == ';'
         //parse the Token to not include the ';'
         string tempP = string(p);
@@ -106,6 +108,35 @@ Base* grabTree(char *cstr) {
 
         //Set the boolean to true
         firstArgSemi = true;
+    }
+
+    if(checkingStringTest.compare("test") == 0) {
+        p = strtok(NULL, " ");
+        Test *c = new Test();
+
+        c->add_flag(p);
+        p = strtok(NULL, " ");
+        c->add_flag(p);
+        p = strtok(NULL, " ");
+
+        commandList.push(c);
+
+        if(p != 0) {
+            bool checkingConnectors = checkAllCon(p);
+            char *commentP = (char *) memchr(p, '#', strlen(p));
+
+            if(commentP != NULL) {
+                checkingComment = commentP;
+            }
+            else if(checkingConnectors) {
+                cout << "Error: Expected a connector, Received: " << p << endl;
+                exit(1);
+            }
+            else {
+                connectorList.push(p);
+                p = strtok(NULL, " ");
+            }
+        }
     }
 
     if(checkingTest != NULL) {
@@ -135,6 +166,7 @@ Base* grabTree(char *cstr) {
             bool checkingConnectors = checkAllCon(p);
             if(checkingConnectors) {
                 cout << "Error: Expected a connector, Received: " << p << endl;
+                exit(1);
             }
             char *commentP = (char *) memchr(p, '#', strlen(p));
             if(commentP != NULL) {
@@ -158,6 +190,82 @@ Base* grabTree(char *cstr) {
                 break;
             }
 
+            string checkingStringTest = string(p);
+
+            if(checkingStringTest.compare("test") == 0) {
+                p = strtok(NULL, " ");
+                Test *c = new Test();
+
+                c->add_flag(p);
+                p = strtok(NULL, " ");
+                c->add_flag(p);
+                p = strtok(NULL, " ");
+
+                commandList.push(c);
+
+                if(p != 0) {
+                    bool checkingConnectors = checkAllCon(p);
+                    char *commentP = (char *) memchr(p, '#', strlen(p));
+
+                    if(commentP != NULL) {
+                        checkingComment = commentP;
+                    }
+                    else if(checkingConnectors) {
+                        cout << "Error: Expected a connector, Received: " << p << endl;
+                        exit(1);
+                    }
+                    else {
+                        connectorList.push(p);
+                        p = strtok(NULL, " ");
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+
+            char *testingTest = (char *) memchr(p, '[', strlen(p));
+            if(testingTest != NULL) {
+                Test *c = new Test();
+
+				p = strtok(NULL, " ");
+
+				for(unsigned i=0; i<2; i++) {
+				    //cout << p << endl;
+				    c->add_flag(p);
+				    p = strtok(NULL, " ");
+				}
+
+				//cout << p << endl;
+				if(p != 0) {
+				    char *checkingEndTest = (char *) memchr(p, ']', strlen(p));
+				    if(checkingEndTest == NULL) {
+				        cout << "Error: Expected: ']', Received: " << p << endl;
+				        exit(1);
+				    }
+				}
+				p = strtok(NULL, " ");
+				//cout << p << endl;
+				commandList.push(c);
+
+				if(p!=0) {
+				    bool checkingConnectors = checkAllCon(p);
+				    if(checkingConnectors) {
+				        cout << "Error: Expected a connector, Received: " << p << endl;
+				    }
+				    char *commentP = (char *) memchr(p, '#', strlen(p));
+				    if(commentP != NULL) {
+				        checkingComment = commentP;
+				    }
+				    else {
+				        connectorList.push(p);
+				        p = strtok(NULL, " ");
+				    }
+				}
+                else {
+                    break;
+                }
+            }
             //Assume that the first Token is always a command thus make a Cmd Object
             Cmd *testingCommand = new Cmd(p);
             char *q = p;
@@ -238,7 +346,6 @@ Base* grabTree(char *cstr) {
             }
         }
 
-
         //Construction of tree execution
         if(connectorList.size() > 0) { //Only runs when there are 2 or more commands
             //Pop the first two commands out of the commandList
@@ -317,6 +424,15 @@ Base* grabTree(char *cstr) {
             }
         }
     }//End of infinite for loop
+    if(commandList.size() > 1) {
+        cout << "Error commandList has more than 1 Cmd*" << endl;
+        exit(1);
+    }
+    else {
+        Base* resultCmd = commandList.front();
+        commandList.pop();
+        return resultCmd;
+    }
     return NULL;
 }
 
@@ -571,8 +687,10 @@ int main(int argc, char**argv) {
 
 	            branches.pop();
 	            Base* tree = grabTree(r);
-	            commandTreeList.push(tree);
-	            //tree->execute();
+                if(tree != NULL) {
+                    commandTreeList.push(tree);
+	            }
+                //tree->execute();
 	        }
 
             if(connectors.size() > 0) {
