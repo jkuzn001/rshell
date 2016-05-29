@@ -30,8 +30,5 @@ Exit:
 Test:
 	$(CC) $(CFLAGS) ./src/Test.cpp
 
-Precedence:
-	$(CC) $(CFLAGS) ./src/Precedence.cpp
-
 clean:
 	rm -rf ./bin
