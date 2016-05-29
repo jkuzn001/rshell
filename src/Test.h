@@ -10,5 +10,4 @@ class Test: public Cmd {
     Test();
     virtual bool execute();
 };
-
 #endif

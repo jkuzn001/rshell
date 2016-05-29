@@ -30,5 +30,4 @@ class Cmd: public Base {
 
     //void printFlags();
 };
-
 #endif

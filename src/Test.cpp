@@ -13,7 +13,7 @@
 #include <queue>
 #include <sstream>
 #include <dirent.h>
-#include <iostream> 
+#include <iostream>
 
 using namespace std;
 
@@ -43,37 +43,37 @@ bool Test::execute() {
         flags.pop();
         path = flags.front();
     }
-      
+
     int statret = stat(path.c_str(),&buf);
     if (statret == 0) {
         exists = true;
     }
-    if(statret == -1) { 
+    if(statret == -1) {
         perror("stat");
         return false;
     }
 
     if(flag == "-e") {
-        cout << "true" << endl;
+        cout << "(true)" << endl;
         return exists;
     }
     else if(flag == "-d") {
         if(S_ISDIR(buf.st_mode)) {
-            cout << "true" << endl;
+            cout << "(true)" << endl;
             return true;
         }
         else {
-            cout << "false" << endl;
+            cout << "(false)" << endl;
             return false;
         }
     }
     else if(flag == "-f") {
          if(S_ISREG(buf.st_mode)) {
-             cout << "true" << endl;
+             cout << "(true)" << endl;
              return true;
          }
         else {
-            cout << "false" << endl;
+            cout << "(false)" << endl;
             return false;
         }
     }
@@ -82,5 +82,4 @@ bool Test::execute() {
         return false;
     }
 }
-
 #endif

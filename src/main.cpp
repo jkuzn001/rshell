@@ -19,6 +19,7 @@ using namespace std;
 #include "OR.cpp"
 #include "Semicolon.cpp"
 #include "Exit.cpp"
+#include "Test.cpp"
 
 const string AND_STRING = "&&";
 const string OR_STRING = "||";
@@ -79,7 +80,7 @@ bool checkAllCon(char *q) {
 
 Base* grabTree(char *cstr) {
 
-    queue<Cmd* > commandList;               //Separates the Commands to create Cmd's objects respectively
+    queue<Base *> commandList;               //Separates the Commands to create Cmd's objects respectively
     queue<char *> connectorList;            //Same here, but for Connectors ofc ^
     queue<Connector *> completedListToRun;  //This queue should only contain one tree of all the commmands
                                             //and connectors
@@ -89,6 +90,7 @@ Base* grabTree(char *cstr) {
     bool firstArgSemi = false; //used within the while loop
     char *checkingSemi = (char *) memchr(p, ';', strlen(p));          //check first Token for Semi
     char *checkingComment = (char *) memchr(p, '#', strlen(p));       //check first Token for Comment
+    char *checkingTest = (char *) memchr(p, '[', strlen(p));          //check first Token for Test
 
     if(checkingSemi != NULL) {                                        //if 1st Token == ';'
         //parse the Token to not include the ';'
@@ -106,8 +108,33 @@ Base* grabTree(char *cstr) {
         firstArgSemi = true;
     }
 
-    if(checkingComment == NULL) {    //if there is a '#' in the first Token, disregard everything
+    if(checkingTest != NULL) {
+        Test *c = new Test();
 
+        string testNotation = "test";
+        char *pushTestNotation = new char[5];
+        strcpy(pushTestNotation, testNotation.c_str());
+        c->add_flag(pushTestNotation);
+        p = strtok(NULL, " ");
+
+        for(unsigned i=0; i<2; i++) {
+            c->add_flag(p);
+            p = strtok(NULL, " ");
+        }
+
+        p = strtok(NULL, " ");
+        if(p != 0) {
+            char *checkingEndTest = (char *) memchr(p, ']', strlen(p));
+            if(checkingEndTest == NULL) {
+                cout << "Error: Expected: ']', Received: " << p << endl;
+                exit(1);
+            }
+        }
+        commandList.push(c);
+    }
+
+
+    if(checkingComment == NULL) {    //if there is a '#' in the first Token, disregard everything
         bool commentDetected = false;
         while(p!=0 && !commentDetected) {
             //Check if the next token contains a #
@@ -201,9 +228,9 @@ Base* grabTree(char *cstr) {
         //Construction of tree execution
         if(connectorList.size() > 0) { //Only runs when there are 2 or more commands
             //Pop the first two commands out of the commandList
-            Cmd *lhs = commandList.front();
+            Base *lhs = commandList.front();
             commandList.pop();
-            Cmd *rhs = commandList.front();
+            Base *rhs = commandList.front();
             commandList.pop();
 
             //Pop a connector of the connectorList
@@ -234,7 +261,7 @@ Base* grabTree(char *cstr) {
             while(connectorList.size() != 0) {
                 Connector *tempLHS = completedListToRun.front();
                 completedListToRun.pop();
-                Cmd *rhs = commandList.front();
+                Base *rhs = commandList.front();
                 commandList.pop();
 
                 char *temp2 = connectorList.front();
@@ -253,7 +280,6 @@ Base* grabTree(char *cstr) {
                 }
 
             }
-
             //After building the tree, pop the single command from completedListToRun
             //and run execute on the command. The execute function will travel through the completed tree
             //and execute the individual Cmd objects respectively and return a boolean value based on
@@ -271,7 +297,7 @@ Base* grabTree(char *cstr) {
             }
             else {
                 //Simply pop the one command from the CommandList and execute it
-                Cmd *temporaryCmd = commandList.front();
+                Base *temporaryCmd = commandList.front();
                 commandList.pop();
                 return temporaryCmd;
             }
@@ -316,28 +342,43 @@ int main(int argc, char**argv) {
         //p = strtok(NULL, " ");                                      //Then advance p
 
 
-        size_t found = userInput.find('(');
-
-        if(found!=std::string::npos) {
+        size_t foundPrecedence = userInput.find('(');
+        size_t foundTest = userInput.find('[');
+        if(foundPrecedence!=std::string::npos || foundTest!=std::string::npos) {
             string totalString = "";
 
             char *p = strtok(cstr, " ");
 
-
             while(p!=0) {
                 char *checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
                 char *checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
+                char *checkingTestB = (char *) memchr(p, '[', strlen(p));
+                char *checkingTestE = (char *) memchr(p, ']', strlen(p));
+                int totalEndingPrecedence = 0;
 
-                if(checkingPrecedenceF != NULL) {
+                if(checkingTestB != NULL) {
+                    totalString += "[ ";
+                    splitUpFirstCharacter(p);
+                    totalString += string(p);
+                    totalString += " ";
+                }
+                else if(checkingTestE != NULL) {
+                    splitUpLastCharacter(p);
+
+                    totalString += string(p);
+                    totalString += " ";
+                    totalString += "] ";
+                }
+                else if(checkingPrecedenceF != NULL) {
                     while(checkingPrecedenceF != NULL) {
                         totalString += "( ";
                         splitUpFirstCharacter(p);
                         checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
                     }
+                    totalString += string(p);
+                    totalString += " ";
                 }
-
-                int totalEndingPrecedence = 0;
-                if(checkingPrecedenceE != NULL) {
+                else if(checkingPrecedenceE != NULL) {
                     while(checkingPrecedenceE != NULL) {
                         totalEndingPrecedence++;
                         splitUpLastCharacter(p);
@@ -567,7 +608,7 @@ int main(int argc, char**argv) {
                 commandTreeList.pop();
 
                 if(commandTreeList.size() != 0) {
-                    cout << "Error" << endl;
+                    cout << "Error: commandTreeList.size() != 0" << endl;
                     exit(1);
                 }
 
