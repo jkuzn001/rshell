@@ -17,11 +17,30 @@
 
 using namespace std;
 
-#include "Cmd.h"
 #include "Test.h"
+#include "Base.h"
 
-Test::Test(queue<char*> flags): Cmd(flags) {}
-Test::Test(): Cmd() {}
+//constructors
+Test::Test(char* command, queue<char *> flags) {
+    this->command = command;
+    this->flags = flags;
+}
+
+Test::Test(queue<char*> flags) {
+    this->flags = flags;
+}
+
+Test::Test() {}
+
+//push any new flags into the queue<char *> flags
+void Test::add_flag(char*a) {
+    flags.push(a);
+}
+
+//Used for the Exit Command to fix Exit bug
+string Test::getCommand() {
+    return command;
+}
 
 //executes the test according the flag specified
 //if flag == -e it will be tested to see if it is either a directory or a regular file
@@ -39,11 +58,14 @@ bool Test::execute() {
         path = flags.front();
     }
     else {
+        //cout << flags.front() << endl;
         flag = flags.front();
         flags.pop();
+        //cout << flags.front() << endl;
         path = flags.front();
     }
 
+    //cout << path << endl;
     int statret = stat(path.c_str(),&buf);
     if (statret == 0) {
         exists = true;

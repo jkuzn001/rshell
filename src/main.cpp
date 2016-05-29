@@ -111,18 +111,15 @@ Base* grabTree(char *cstr) {
     if(checkingTest != NULL) {
         Test *c = new Test();
 
-        string testNotation = "test";
-        char *pushTestNotation = new char[5];
-        strcpy(pushTestNotation, testNotation.c_str());
-        c->add_flag(pushTestNotation);
         p = strtok(NULL, " ");
 
         for(unsigned i=0; i<2; i++) {
+            //cout << p << endl;
             c->add_flag(p);
             p = strtok(NULL, " ");
         }
 
-        p = strtok(NULL, " ");
+        //cout << p << endl;
         if(p != 0) {
             char *checkingEndTest = (char *) memchr(p, ']', strlen(p));
             if(checkingEndTest == NULL) {
@@ -130,7 +127,24 @@ Base* grabTree(char *cstr) {
                 exit(1);
             }
         }
+        p = strtok(NULL, " ");
+        //cout << p << endl;
         commandList.push(c);
+
+        if(p!=0) {
+            bool checkingConnectors = checkAllCon(p);
+            if(checkingConnectors) {
+                cout << "Error: Expected a connector, Received: " << p << endl;
+            }
+            char *commentP = (char *) memchr(p, '#', strlen(p));
+            if(commentP != NULL) {
+                checkingComment = commentP;
+            }
+            else {
+                connectorList.push(p);
+                p = strtok(NULL, " ");
+            }
+        }
     }
 
 
@@ -338,13 +352,10 @@ int main(int argc, char**argv) {
         //Doing the Precedence Algorithm
         queue<Base *> precedenceTrees;
         queue<Connector *> outsideConnectors;
-        //char *p = strtok(cstr, " ");                                //Initialize a array of Tokens
-        //p = strtok(NULL, " ");                                      //Then advance p
-
 
         size_t foundPrecedence = userInput.find('(');
         size_t foundTest = userInput.find('[');
-        if(foundPrecedence!=std::string::npos || foundTest!=std::string::npos) {
+        if(foundPrecedence!=std::string::npos || (foundPrecedence!=std::string::npos && foundTest!=std::string::npos)) {
             string totalString = "";
 
             char *p = strtok(cstr, " ");
@@ -356,7 +367,17 @@ int main(int argc, char**argv) {
                 char *checkingTestE = (char *) memchr(p, ']', strlen(p));
                 int totalEndingPrecedence = 0;
 
-                if(checkingTestB != NULL) {
+                if(checkingPrecedenceF != NULL && checkingTestB != NULL) {
+                    while(checkingPrecedenceF != NULL) {
+                        totalString += "( ";
+                        checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
+                        splitUpFirstCharacter(p);
+                    }
+                    totalString += "[ ";
+                    totalString += string(p);
+                    totalString += " ";
+                }
+                else if(checkingTestB != NULL) {
                     totalString += "[ ";
                     splitUpFirstCharacter(p);
                     totalString += string(p);
@@ -419,138 +440,140 @@ int main(int argc, char**argv) {
             }
             //cout << totalString << endl;
 
+            //size_t CheckForPrecdence = userInput.find('(');
+            //foundPrecedence!=std::string::npos
             //Separating stuff
             char *totalChar = new char[totalString.size()+1];                  //Initialize a C string array
             strcpy(totalChar, totalString.c_str());                            //Parse the string into a *cstr
 
             char *c = strtok(totalChar, " ");
 
-            stack<char *> stringStack;                              //Used to separate to different strings
-            queue<string> branches;
-            queue<char *> connectors;
+	        stack<char *> stringStack;                              //Used to separate to different strings
+	        queue<string> branches;
+	        queue<char *> connectors;
 
-            bool withinPrecedence = false;                          //Used for connectors.
-            bool newPrecedence = false;                             //Whether or not in a closed area.
-            //newPrecedence true = within a closed area. false != within a closed area
-            //Second Pass
-            while(c!=0) {
-                char *beginPrecedence = (char *) memchr(c, '(', strlen(c));
-                char *endPrecedence = (char *) memchr(c, ')', strlen(c));
-                bool checkConnectors = checkAllCon(c);     //check if Token is a connector
+	        bool withinPrecedence = false;                          //Used for connectors.
+	        bool newPrecedence = false;                             //Whether or not in a closed area.
+	        //newPrecedence true = within a closed area. false != within a closed area
+	        //Second Pass
+	        while(c!=0) {
+	            char *beginPrecedence = (char *) memchr(c, '(', strlen(c));
+	            char *endPrecedence = (char *) memchr(c, ')', strlen(c));
+	            bool checkConnectors = checkAllCon(c);     //check if Token is a connector
 
-                if(beginPrecedence != NULL) {
-                    withinPrecedence = true;
+	            if(beginPrecedence != NULL) {
+	                withinPrecedence = true;
 
-                    if(!newPrecedence) {
-                        stack<char *> currentString;
+	                if(!newPrecedence) {
+	                    stack<char *> currentString;
 
-                        while(!stringStack.empty()) {
-                            char *a = stringStack.top();
-                            char *checkingStartPrecedence = (char *) memchr(a, '(', strlen(a));
+	                    while(!stringStack.empty()) {
+	                        char *a = stringStack.top();
+	                        char *checkingStartPrecedence = (char *) memchr(a, '(', strlen(a));
 
-                            if(checkingStartPrecedence != NULL) {
-                                stringStack.pop();
-                                break;
-                            }
+	                        if(checkingStartPrecedence != NULL) {
+	                            stringStack.pop();
+	                            break;
+	                        }
 
-                            currentString.push(a);
-                            stringStack.pop();
-                        }
-                        string finalString;
+	                        currentString.push(a);
+	                        stringStack.pop();
+	                    }
+	                    string finalString;
 
-                        while(!currentString.empty()) {
-                            finalString += currentString.top();
-                            finalString += " ";
-                            currentString.pop();
-                        }
-                        //cout << finalString << endl;
-                        if(finalString.size() > 0) {
-                            branches.push(finalString);
-                        }
-                    }
+	                    while(!currentString.empty()) {
+	                        finalString += currentString.top();
+	                        finalString += " ";
+	                        currentString.pop();
+	                    }
+	                    //cout << finalString << endl;
+	                    if(finalString.size() > 0) {
+	                        branches.push(finalString);
+	                    }
+	                }
 
-                    newPrecedence = true;
-                }
-                else if(endPrecedence != NULL) {
-                    withinPrecedence = false;
-                    newPrecedence = false;
-                    stack<char *> currentString;
+	                newPrecedence = true;
+	            }
+	            else if(endPrecedence != NULL) {
+	                withinPrecedence = false;
+	                newPrecedence = false;
+	                stack<char *> currentString;
 
-                    while(!stringStack.empty()) {
-                        char *a = stringStack.top();
-                        char *checkingStartPrecedence = (char *) memchr(a, '(', strlen(a));
+	                while(!stringStack.empty()) {
+	                    char *a = stringStack.top();
+	                    char *checkingStartPrecedence = (char *) memchr(a, '(', strlen(a));
 
-                        if(checkingStartPrecedence != NULL) {
-                            stringStack.pop();
-                            break;
-                        }
+	                    if(checkingStartPrecedence != NULL) {
+	                        stringStack.pop();
+	                        break;
+	                    }
 
-                        currentString.push(a);
-                        stringStack.pop();
-                    }
-                    string finalString;
+	                    currentString.push(a);
+	                    stringStack.pop();
+	                }
+	                string finalString;
 
-                    while(!currentString.empty()) {
-                        finalString += currentString.top();
-                        finalString += " ";
-                        currentString.pop();
-                    }
-                    //cout << finalString << endl;
-                    if(finalString.size() > 0) {
-                        branches.push(finalString);
-                    }
-                }
-                else if(!checkConnectors && !withinPrecedence) {
-                    //cout << "Outside Connectors: " << c << endl;
-                    connectors.push(c);
-                }
-                else {
-                    //cout << "Pushing into stringStack: " << c << endl;
-                    stringStack.push(c);
-                }
-                c = strtok(NULL, " ");
-            }
+	                while(!currentString.empty()) {
+	                    finalString += currentString.top();
+	                    finalString += " ";
+	                    currentString.pop();
+	                }
+	                //cout << finalString << endl;
+	                if(finalString.size() > 0) {
+	                    branches.push(finalString);
+	                }
+	            }
+	            else if(!checkConnectors && !withinPrecedence) {
+	                //cout << "Outside Connectors: " << c << endl;
+	                connectors.push(c);
+	            }
+	            else {
+	                //cout << "Pushing into stringStack: " << c << endl;
+	                stringStack.push(c);
+	            }
+	            c = strtok(NULL, " ");
+	        }
 
-            stack<char *> currentOvers;
-            while(!stringStack.empty()) {
-                currentOvers.push(stringStack.top());
-                stringStack.pop();
-            }
+	        stack<char *> currentOvers;
+	        while(!stringStack.empty()) {
+	            currentOvers.push(stringStack.top());
+	            stringStack.pop();
+	        }
 
-            string leftOvers;
-            while(!currentOvers.empty()) {
-                leftOvers += currentOvers.top();
-                leftOvers += " ";
-                currentOvers.pop();
-            }
+	        string leftOvers;
+	        while(!currentOvers.empty()) {
+	            leftOvers += currentOvers.top();
+	            leftOvers += " ";
+	            currentOvers.pop();
+	        }
 
-            //cout << leftOvers << endl;
-            if(leftOvers.size() != 0) {
-                branches.push(leftOvers);
-            }
+	        //cout << leftOvers << endl;
+	        if(leftOvers.size() != 0) {
+	            branches.push(leftOvers);
+	        }
 
-            /*
-            while(!branches.empty()) {
-                cout << branches.front() << endl;
-                branches.pop();
-            }
-            while(!connectors.empty()) {
-                cout << connectors.front() << endl;
-                connectors.pop();
-            }
-            */
-            queue<Base *> commandTreeList;
+	        /*
+	        while(!branches.empty()) {
+	            cout << branches.front() << endl;
+	            branches.pop();
+	        }
+	        while(!connectors.empty()) {
+	            cout << connectors.front() << endl;
+	            connectors.pop();
+	        }
+	        */
+	        queue<Base *> commandTreeList;
 
-            while(!branches.empty()) {
-                //cout << branches.front() << endl;
-                char *r = new char[branches.front().size()+1];
-                strcpy(r, branches.front().c_str());
+	        while(!branches.empty()) {
+	            //cout << branches.front() << endl;
+	            char *r = new char[branches.front().size()+1];
+	            strcpy(r, branches.front().c_str());
 
-                branches.pop();
-                Base* tree = grabTree(r);
-                commandTreeList.push(tree);
-                //tree->execute();
-            }
+	            branches.pop();
+	            Base* tree = grabTree(r);
+	            commandTreeList.push(tree);
+	            //tree->execute();
+	        }
 
             if(connectors.size() > 0) {
                 queue<Connector *>completedListToRun;
@@ -616,8 +639,45 @@ int main(int argc, char**argv) {
             }
         }
         else {
-            Base* s =	grabTree(cstr);
-            s->execute();
+            size_t foundTest = userInput.find('[');
+            if(foundTest!=std::string::npos) {
+                string totalString = "";
+                char *p = strtok(cstr, " ");
+
+                while(p!=0) {
+                    char *checkingTestB = (char *) memchr(p, '[', strlen(p));
+                    char *checkingTestE = (char *) memchr(p, ']', strlen(p));
+
+                    if(checkingTestB != NULL) {
+                        totalString += "[ ";
+                        splitUpFirstCharacter(p);
+                        totalString += string(p);
+                        totalString += " ";
+                    }
+                    else if(checkingTestE != NULL) {
+                        splitUpLastCharacter(p);
+                        totalString += string(p);
+                        totalString += " ";
+                        totalString += "] ";
+                    }
+                    else {
+                        totalString += string(p);
+                        totalString += " ";
+                    }
+                    p = strtok(NULL, " ");
+                }
+
+                //cout << totalString << endl;
+	            char *r = new char[totalString.size()+1];
+	            strcpy(r, totalString.c_str());
+
+                Base *s = grabTree(r);
+                s->execute();
+            }
+            else {
+                Base* s = grabTree(cstr);
+                s->execute();
+            }
         }
 
         delete[] cstr;  //Deallocate the memory
