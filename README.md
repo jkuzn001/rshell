@@ -27,7 +27,7 @@ For the second part of this assignment we added some functionality to our Turtle
 UML DIAGRAM
 ------------
 
-![Alt text](/pictures/UML_Diagram.png?raw=true "Optional Title")
+![Alt text](/pictures/Diagram1.png.png?raw=true "Optional Title")
 
 Parsing with Tokens!!!
 ------------
