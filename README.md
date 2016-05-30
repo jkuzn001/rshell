@@ -1,4 +1,4 @@
-#RShell (Turtle Shell)
+#Turtle Shell
 Full Documentation of RShell (Turtle Shell) designs and coding strategies can be found in
 
 https://drive.google.com/open?id=0B63l6C_S7h9vTTU5UERYaWpPZFU
