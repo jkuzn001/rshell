@@ -41,37 +41,38 @@ From there we will construct a tree that will recursively call execute(), which 
 
 RShell (Turtle Shell) Features
 ------------
-Can run all bash commands within /bin
+**Can run all bash commands within /bin**
 
-Can support all connectors such as;
+**Can support all connectors such as;**
 * ";" = The following command will always be exectued.
 * "||" = If the current command fails, the following command will be executed.
 * "&&" = If the current command succeeds, the following command will be executed.
 * "#" = Everything after "#" will be a comment.
 
-Can executes the test according the flag specified;
+**Can executes the test according the flag specified;**
 * if flag == -e it will be tested to see if it is either a directory or a regular file
 * if flag == -f it will be tested to see if it is a regular file
 * if flag == -d it will be tested to see if it is a directory
 * if no flag is provided then -e will be assumed
 test command will print out (true) and (false) based on returned boolean value respectively. 
 
-Can support precedences operators so instead of <br />
-echo A && echo B || echo C && echo D which will yield <br />
+**Can support precedences operators so instead of <br />**
+echo A && echo B || echo C && echo D which will yield <br /><br />
 A <br />
 B <br />
-D <br />
+D <br /><br />
 You can now do <br />
-(echo A && echo B) || (echo C && echo D) which will yield <br />
+(echo A && echo B) || (echo C && echo D) which will yield <br /><br />
 A <br />
-B <br />
+B <br /><br />
 
-User information work!!!
+**User information work!!!**<br />
 Instead of having RShell (Turtle Shell) print a boring "$" before each command.
-Our RShell (Turtle Shell) can print out your entire user's info.
+Our RShell (Turtle Shell) can print out your entire user's info.<br />
 
 For example, suppose your username is "Turtle" and that you're logged into the machine named "shellTheFirst",
 our RShell (Turtle Shell) will prompt "Turtle@shellTheFirst$ " on your terminal!
+
 Bugs
 ------------
 RShell (Turtle Shell) does not support quotes combined flags.
