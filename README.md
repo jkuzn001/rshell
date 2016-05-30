@@ -1,3 +1,5 @@
+![Alt text](/pictures/Turtle.jpeg?raw=true "Optional Title")
+
 #Turtle Shell
 Full Documentation of Turtle Shell designs and coding strategies can be found in
 
