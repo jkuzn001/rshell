@@ -21,10 +21,12 @@ using namespace std;
 #include "Exit.cpp"
 #include "Test.cpp"
 
+//Global Variables used to check connectors
 const string AND_STRING = "&&";
 const string OR_STRING = "||";
 const string SEMI_STRING = ";";
 
+//Function used to delete the first character of a cString
 void splitUpFirstCharacter(char* p) {
 
     string tempP = string(p);
@@ -32,6 +34,7 @@ void splitUpFirstCharacter(char* p) {
     strcpy(p, tempP.c_str());
 }
 
+//Function used to delete the last character of a cString but does not delete '#' and ';'
 void splitUpLastCharacter(char* p) {
     string tempP = string(p);
     size_t comments = tempP.find('#');
@@ -45,6 +48,7 @@ void splitUpLastCharacter(char* p) {
     strcpy(p, tempP.c_str());
 }
 
+//Function used to delete the last character no matter what
 void splitUpLastCharacterAlways(char *p) {
     string tempP = string(p);
     tempP.erase(tempP.end()-1);
@@ -65,6 +69,7 @@ bool checkCon(char *q) {
     return true;
 }
 
+//Checks all the connectors
 bool checkAllCon(char *q) {
     vector<string> s;
     s.push_back("&&");
@@ -78,6 +83,7 @@ bool checkAllCon(char *q) {
     return true;
 }
 
+//Function will take in a cstr and return a tree representation of said cstr.
 Base* grabTree(char *cstr) {
 
     queue<Base *> commandList;               //Separates the Commands to create Cmd's objects respectively
@@ -92,7 +98,7 @@ Base* grabTree(char *cstr) {
     char *checkingComment = (char *) memchr(p, '#', strlen(p));       //check first Token for Comment
     char *checkingTest = (char *) memchr(p, '[', strlen(p));          //check first Token for Test
 
-    string checkingStringTest = string(p);
+    string checkingStringTest = string(p);                            //checks for 'test'
 
     if(checkingSemi != NULL) {                                        //if 1st Token == ';'
         //parse the Token to not include the ';'
@@ -110,26 +116,27 @@ Base* grabTree(char *cstr) {
         firstArgSemi = true;
     }
 
+    //checks if first string is 'test'
     if(checkingStringTest.compare("test") == 0) {
-        p = strtok(NULL, " ");
-        Test *c = new Test();
+        p = strtok(NULL, " "); //skip the actual string 'test'
+        Test *c = new Test();  //Creates a Test instance
 
-        char *checkFlag = (char *) memchr(p, '-', strlen(p));
-        if(checkFlag != NULL) {
+        char *checkFlag = (char *) memchr(p, '-', strlen(p));   //Checks if the next element is a flag
+        if(checkFlag != NULL) { //if so take in the flag into account by adding two elements to the flag.
             //cout << p << endl;
             c->add_flag(p);
             p = strtok(NULL, " ");
             c->add_flag(p);
             p = strtok(NULL, " ");
         }
-        else {
+        else {                  //if not only add one element to the flag
             c->add_flag(p);
             p = strtok(NULL, " ");
         }
 
-        commandList.push(c);
+        commandList.push(c);   //Push the finish Test into the queue to be turned to a tree later
 
-        if(p != 0) {
+        if(p != 0) {           //Check before going into the loop
             bool checkingConnectors = checkAllCon(p);
             char *commentP = (char *) memchr(p, '#', strlen(p));
 
@@ -147,6 +154,7 @@ Base* grabTree(char *cstr) {
         }
     }
 
+    //Used to check '[' same algorithm as the 'test'
     if(checkingTest != NULL) {
         Test *c = new Test();
 
@@ -164,7 +172,7 @@ Base* grabTree(char *cstr) {
             p = strtok(NULL, " ");
         }
         //cout << p << endl;
-        if(p != 0) {
+        if(p != 0) {    //A throw statement for error user checking
             char *checkingEndTest = (char *) memchr(p, ']', strlen(p));
             if(checkingEndTest == NULL) {
                 cout << "Error: Expected: ']', Received: " << p << endl;
@@ -203,7 +211,7 @@ Base* grabTree(char *cstr) {
                 break;
             }
 
-            string checkingStringTest = string(p);
+            string checkingStringTest = string(p);  //Same algorithm as commented on top
 
             if(checkingStringTest.compare("test") == 0) {
                 p = strtok(NULL, " ");
@@ -244,7 +252,7 @@ Base* grabTree(char *cstr) {
                 }
             }
 
-            char *testingTest = (char *) memchr(p, '[', strlen(p));
+            char *testingTest = (char *) memchr(p, '[', strlen(p)); //Same algorithm as top
             if(testingTest != NULL) {
                 Test *c = new Test();
 
@@ -488,13 +496,15 @@ int main(int argc, char**argv) {
         queue<Base *> precedenceTrees;
         queue<Connector *> outsideConnectors;
 
-        size_t foundPrecedence = userInput.find('(');
-        size_t foundTest = userInput.find('[');
-        if(foundPrecedence!=std::string::npos || (foundPrecedence!=std::string::npos && foundTest!=std::string::npos)) {
+        size_t foundPrecedence = userInput.find('(');               //Check if '(' is in the userString
+        size_t foundTest = userInput.find('[');                     //Same for '['
+        if(foundPrecedence!=std::string::npos || (foundPrecedence!=std::string::npos && foundTest!=std::string::npos)) {    //If we find the '(' or if we find both '(' and '[' operators
             string totalString = "";
 
             char *p = strtok(cstr, " ");
 
+            //Go through the entire string while checking if any element contains the following listed below.
+            //If so then separate the operators from the "command/flags/paths" parts
             while(p!=0) {
                 char *checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
                 char *checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
@@ -625,6 +635,8 @@ int main(int argc, char**argv) {
 
                 p = strtok(NULL, " ");
             }
+            //The returned String will contain everything with the operators being separate from the real
+            //commands/flags/paths
             //cout << totalString << endl;
 
             //size_t CheckForPrecdence = userInput.find('(');
@@ -642,7 +654,12 @@ int main(int argc, char**argv) {
 	        bool withinPrecedence = false;                          //Used for connectors.
 	        bool newPrecedence = false;                             //Whether or not in a closed area.
 	        //newPrecedence true = within a closed area. false != within a closed area
-	        //Second Pass
+
+            //The second pass will allow the program to use a stack pos-fix method to determine what is
+            //within two Precedence Operators.
+            //Basically we shall continue to push cstring elements into a stack and setting the
+            //withinPrecedence and newPrecedence respectively. When we find the endPrecedence, we shall
+            //continue to pop out cstring elements from the stack until we reach the respective beginPrecedence
 	        while(c!=0) {
 	            char *beginPrecedence = (char *) memchr(c, '(', strlen(c));
 	            char *endPrecedence = (char *) memchr(c, ')', strlen(c));
@@ -721,12 +738,14 @@ int main(int argc, char**argv) {
 	            c = strtok(NULL, " ");
 	        }
 
+            //Used to reverse the order
 	        stack<char *> currentOvers;
 	        while(!stringStack.empty()) {
 	            currentOvers.push(stringStack.top());
 	            stringStack.pop();
 	        }
 
+            //Used to populate a new string so we can push the leftOver stuff in the branch Queue.
 	        string leftOvers;
 	        while(!currentOvers.empty()) {
 	            leftOvers += currentOvers.top();
@@ -739,18 +758,10 @@ int main(int argc, char**argv) {
 	            branches.push(leftOvers);
 	        }
 
-	        /*
-	        while(!branches.empty()) {
-	            cout << branches.front() << endl;
-	            branches.pop();
-	        }
-	        while(!connectors.empty()) {
-	            cout << connectors.front() << endl;
-	            connectors.pop();
-	        }
-	        */
-	        queue<Base *> commandTreeList;
+            queue<Base *> commandTreeList;
 
+            //This will go through the entire branches queue and call the grabTree() function to return
+            //a tree representation so that we may push it into our queue<Base*> commandTreeList
 	        while(!branches.empty()) {
 	            //cout << branches.front() << endl;
 	            char *r = new char[branches.front().size()+1];
@@ -764,6 +775,7 @@ int main(int argc, char**argv) {
                 //tree->execute();
 	        }
 
+            //Same algorithm described in the grabTree() Function
             if(connectors.size() > 0) {
                 queue<Connector *>completedListToRun;
 
@@ -828,6 +840,7 @@ int main(int argc, char**argv) {
             }
         }
         else {
+            //Special case where there is only a test command
             size_t foundTest = userInput.find('[');
             if(foundTest!=std::string::npos) {
                 string totalString = "";
@@ -836,6 +849,7 @@ int main(int argc, char**argv) {
                     char *checkingTestB = (char *) memchr(p, '[', strlen(p));
                     char *checkingTestE = (char *) memchr(p, ']', strlen(p));
 
+                    //Special case for [(flag) (path)]
                     if(checkingTestB != NULL && checkingTestE != NULL) {
                         totalString += "[ ";
                         splitUpFirstCharacter(p);
