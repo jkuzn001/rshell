@@ -39,6 +39,16 @@ From there we will construct a tree that will recursively call execute(), which 
 
 ![Alt text](/pictures/tree.png?raw=true "Optional Title")
 
+Tree Representation For Precedence
+------------
+We decided to expand the Turtle shell by implementing the Precedence Operator. To accomplish this, we decided to encapsulate the tree representation algorithm into a **Base *grabTree(char *cstr)** which will pass in a cstring and return a Base tree representation. From there we can parse the User's input to determine whether a string is between a precedence operator. To accomplish this, we were inspired by the post-fix calucator algorithm thus we constructed our own version of a stack familiar algorithm. Lastly, pushed all returned Base tree representation into a **queue<Base *> treeBranches**. A picture representation is shown below.  
+
+![Alt text](/pictures/PrecedenceParsing.png?raw=true "Optional Title")
+
+From There we shall reuse our previous algorithms to connect all tree branches into one whole tree. A picture representation is shown below. 
+
+![Alt text](/pictures/PrecedenceTree.png?raw=true "Optional Title")
+
 RShell (Turtle Shell) Features
 ------------
 **Can run all bash commands within /bin**
