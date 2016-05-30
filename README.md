@@ -41,7 +41,7 @@ From there we will construct a tree that will recursively call execute(), which 
 
 Tree Representation For Precedence
 ------------
-We decided to expand the Turtle shell by implementing the Precedence Operator. To accomplish this, we decided to encapsulate the tree representation algorithm into a **Base *grabTree(char *cstr)** which will pass in a cstring and return a Base tree representation. From there we can parse the User's input to determine whether a string is between a precedence operator. To accomplish this, we were inspired by the post-fix calucator algorithm thus we constructed our own version of a stack familiar algorithm. Lastly, pushed all returned Base tree representation into a **queue<Base *> treeBranches**. A picture representation is shown below with the example:  "(echo A && echo B) && (echo C && echo D)".  
+We decided to expand the Turtle shell by implementing the Precedence Operator. To accomplish this, we decided to encapsulate the tree representation algorithm into a **Base *grabTree(char *cstr)** which will pass in a cstring and return a Base tree representation. From there we can parse the User's input to determine whether a string is between a precedence operator. To accomplish this, we were inspired by the post-fix calucator algorithm thus we constructed our own version of a stack familiar algorithm. Lastly, pushed all returned Base tree representation into a __queue<Base *> treeBranches__. A picture representation is shown below of the example:  "(echo A && echo B) && (echo C && echo D)".  
 
 ![Alt text](/pictures/PrecedenceParsing.png?raw=true "Optional Title")
 
