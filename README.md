@@ -71,7 +71,7 @@ You can now do <br />
 A <br />
 B <br /><br />
 
-**Can executes the test command by using "test" or "[]" with flags specified below;**
+**Can executes the test command by using "test" or "[ ]" with flags specified below;**
 * if flag == -e it will be tested to see if it is either a directory or a regular file
 * if flag == -f it will be tested to see if it is a regular file
 * if flag == -d it will be tested to see if it is a directory
