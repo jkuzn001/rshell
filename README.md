@@ -49,6 +49,23 @@ Can support all connectors such as;
 * "&&" = If the current command succeeds, the following command will be executed.
 * "#" = Everything after "#" will be a comment.
 
+Can executes the test according the flag specified;
+* if flag == -e it will be tested to see if it is either a directory or a regular file
+* if flag == -f it will be tested to see if it is a regular file
+* if flag == -d it will be tested to see if it is a directory
+* if no flag is provided then -e will be assumed
+test command will print out (true) and (false) based on returned boolean value respectively. 
+
+Can support precedences operators so instead of 
+echo A && echo B || echo C && echo D which will yield
+A
+B
+D
+You can now do 
+(echo A && echo B) || (echo C && echo D) which will yield 
+A
+B
+
 User information work!!!
 Instead of having RShell (Turtle Shell) print a boring "$" before each command.
 Our RShell (Turtle Shell) can print out your entire user's info.
