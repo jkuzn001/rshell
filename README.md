@@ -56,15 +56,15 @@ Can executes the test according the flag specified;
 * if no flag is provided then -e will be assumed
 test command will print out (true) and (false) based on returned boolean value respectively. 
 
-Can support precedences operators so instead of__
-echo A && echo B || echo C && echo D which will yield__
-A__
-B__
-D__
-You can now do__
-(echo A && echo B) || (echo C && echo D) which will yield__
-A__
-B__
+Can support precedences operators so instead of <br />
+echo A && echo B || echo C && echo D which will yield <br />
+A <br />
+B <br />
+D <br />
+You can now do <br />
+(echo A && echo B) || (echo C && echo D) which will yield <br />
+A <br />
+B <br />
 
 User information work!!!
 Instead of having RShell (Turtle Shell) print a boring "$" before each command.
