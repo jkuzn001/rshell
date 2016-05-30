@@ -5,7 +5,7 @@ https://drive.google.com/open?id=0B63l6C_S7h9vTTU5UERYaWpPZFU
 
 Installation
 ------------
-Please run the following commands in terminal to run our RShell (Turtle Shell) on your computer
+Please run the following commands in terminal to run our Turtle Shell on your computer
 ```Installation
 $ git clone https://github.com/jkuzn001/rshell.git
 
