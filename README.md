@@ -18,9 +18,9 @@ $ bin/rshell
 
 Introduction
 ------------
-This is the RShell (Turtle Shell) project of Jacob Kuznicki and Lam Duy Le (aka Patrick Le) for CS 100 Spring 2016. It takes in commands (from bash and special comands such as exit) and connectors and executes them.  We accomplished this by using a composite design pattern consisting of connector class (which acts as the composite class) and a command class (which acts as the leaf).
+This is the Turtle Shell project of Jacob Kuznicki and Lam Duy Le (aka Patrick Le) for CS 100 Spring 2016. It takes in commands (from bash and special comands such as exit) and connectors and executes them.  We accomplished this by using a composite design pattern consisting of connector class (which acts as the composite class) and a command class (which acts as the leaf).
 
-For the second part of this assignment we added some functionality to our Rshell.  We added in the test command that can be called using either the command "test" or by using [].  This command will test if a given file or directory exists in a given path.  The test command's behavior can be augmented by giving it one of the following flags: -e tests if the file or directory exists (is assumed if no flag is provided), -f tests if the file or directory given is a regular file, -d tests if the file or directory given is a directory.  We also added in precedence of commands with ().
+For the second part of this assignment we added some functionality to our Turtle Shell.  We added in the test command that can be called using either the command "test" or by using [].  This command will test if a given file or directory exists in a given path.  The test command's behavior can be augmented by giving it one of the following flags: -e tests if the file or directory exists (is assumed if no flag is provided), -f tests if the file or directory given is a regular file, -d tests if the file or directory given is a directory.  We also added in precedence of commands with ().
 
 UML DIAGRAM
 ------------
@@ -41,7 +41,7 @@ From there we will construct a tree that will recursively call execute(), which 
 
 Tree Representation For Precedence
 ------------
-We decided to expand the Turtle shell by implementing the Precedence Operator. To accomplish this, we decided to encapsulate the tree representation algorithm into a **Base *grabTree(char *cstr)** which will pass in a cstring and return a Base tree representation. From there we can parse the User's input to determine whether a string is between a precedence operator. To accomplish this, we were inspired by the post-fix calucator algorithm thus we constructed our own version of a stack familiar algorithm. Lastly, pushed all returned Base tree representation into a **queue<Base *> treeBranches**. A picture representation is shown below with the example, <br /> "(echo A && echo B) && (echo C && echo D)".  
+We decided to expand the Turtle shell by implementing the Precedence Operator. To accomplish this, we decided to encapsulate the tree representation algorithm into a **Base *grabTree(char *cstr)** which will pass in a cstring and return a Base tree representation. From there we can parse the User's input to determine whether a string is between a precedence operator. To accomplish this, we were inspired by the post-fix calucator algorithm thus we constructed our own version of a stack familiar algorithm. Lastly, pushed all returned Base tree representation into a **queue<Base *> treeBranches**. A picture representation is shown below with the example:  "(echo A && echo B) && (echo C && echo D)".  
 
 ![Alt text](/pictures/PrecedenceParsing.png?raw=true "Optional Title")
 
@@ -49,7 +49,7 @@ From There we shall reuse our previous algorithms to connect all tree branches i
 
 ![Alt text](/pictures/PrecedenceTree.png?raw=true "Optional Title")
 
-RShell (Turtle Shell) Features
+Turtle Shell Features
 ------------
 **Can run all bash commands within /bin**
 
@@ -58,13 +58,6 @@ RShell (Turtle Shell) Features
 * "||" = If the current command fails, the following command will be executed.
 * "&&" = If the current command succeeds, the following command will be executed.
 * "#" = Everything after "#" will be a comment.
-
-**Can executes the test according the flag specified;**
-* if flag == -e it will be tested to see if it is either a directory or a regular file
-* if flag == -f it will be tested to see if it is a regular file
-* if flag == -d it will be tested to see if it is a directory
-* if no flag is provided then -e will be assumed
-test command will print out (true) and (false) based on returned boolean value respectively. 
 
 **Can support precedences operators so instead of <br />**
 echo A && echo B || echo C && echo D which will yield <br /><br />
@@ -76,18 +69,29 @@ You can now do <br />
 A <br />
 B <br /><br />
 
+**Can executes the test command by using "test" or "[]" with flags specified below;**
+* if flag == -e it will be tested to see if it is either a directory or a regular file
+* if flag == -f it will be tested to see if it is a regular file
+* if flag == -d it will be tested to see if it is a directory
+* if no flag is provided then -e will be assumed
+test command will print out (true) and (false) based on returned boolean value respectively. <br />
+Example: test -e main.cpp or [-e main.cpp] will return (true) or (false) based on whether main.cpp is in the current directory. <br />
+Lastly the test command can be combined with other connectors discussed above. 
+
 **User information work!!!**<br />
-Instead of having RShell (Turtle Shell) print a boring "$" before each command.
-Our RShell (Turtle Shell) can print out your entire user's info.<br />
+Instead of having Turtle Shell print a boring "$" before each command.
+Our Turtle Shell can print out your entire user's info.<br />
 
 For example, suppose your username is "Turtle" and that you're logged into the machine named "shellTheFirst",
-our RShell (Turtle Shell) will prompt "Turtle@shellTheFirst$ " on your terminal!
+our Turtle Shell will prompt "Turtle@shellTheFirst$ " on your terminal!
 
 Bugs
 ------------
-RShell (Turtle Shell) does not support quotes combined flags.
+Turtle Shell does not support quotes combined flags.
 * Normal Shell: cat "food in can" => cat: can't open food in cans
 * RShell (Turtle Shell): cat "food in can" => cat: "food: No such file or directory...cans": No such file or directory
+
+Turtle Shell does not support the cd command.
 
 A bug was encountered where a child process would not properly exit on a failed call to execvp but this was fixed by changing the wait system call to waitpid and using the WEXITSTATUS macro to determine the success of the child process which was killed using the exit command.
 
