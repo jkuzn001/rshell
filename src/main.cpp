@@ -152,12 +152,17 @@ Base* grabTree(char *cstr) {
 
         p = strtok(NULL, " ");
 
-        for(unsigned i=0; i<2; i++) {
-            //cout << p << endl;
+        char *checkFlag = (char *) memchr(p, '-', strlen(p));
+        if(checkFlag != NULL) {
+            c->add_flag(p);
+            p = strtok(NULL, " ");
             c->add_flag(p);
             p = strtok(NULL, " ");
         }
-
+        else {
+            c->add_flag(p);
+            p = strtok(NULL, " ");
+        }
         //cout << p << endl;
         if(p != 0) {
             char *checkingEndTest = (char *) memchr(p, ']', strlen(p));
@@ -204,11 +209,18 @@ Base* grabTree(char *cstr) {
                 p = strtok(NULL, " ");
                 Test *c = new Test();
 
-                c->add_flag(p);
-                p = strtok(NULL, " ");
-                c->add_flag(p);
-                p = strtok(NULL, " ");
 
+                char *checkFlag = (char *) memchr(p, '-', strlen(p));
+                if(checkFlag != NULL) {
+                    c->add_flag(p);
+                    p = strtok(NULL, " ");
+                    c->add_flag(p);
+                    p = strtok(NULL, " ");
+                }
+                else {
+                    c->add_flag(p);
+                    p = strtok(NULL, " ");
+                }
                 commandList.push(c);
 
                 if(p != 0) {
@@ -244,9 +256,8 @@ Base* grabTree(char *cstr) {
 				    p = strtok(NULL, " ");
 				}
 
-				//cout << p << endl;
-				if(p != 0) {
-				    char *checkingEndTest = (char *) memchr(p, ']', strlen(p));
+                if(p != 0) {
+                    char *checkingEndTest = (char *) memchr(p, ']', strlen(p));
 				    if(checkingEndTest == NULL) {
 				        cout << "Error: Expected: ']', Received: " << p << endl;
 				        exit(1);
@@ -491,7 +502,51 @@ int main(int argc, char**argv) {
                 char *checkingTestE = (char *) memchr(p, ']', strlen(p));
                 int totalEndingPrecedence = 0;
 
-                if(checkingPrecedenceF != NULL && checkingTestB != NULL) {
+                if(checkingPrecedenceF != NULL && checkingPrecedenceF != NULL && checkingTestB != NULL && checkingTestE != NULL) {
+                    while(checkingPrecedenceF != NULL) {
+                        totalString += "( ";
+                        splitUpFirstCharacter(p);
+                        checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
+                    }
+
+                    totalString += "[ ";
+                    splitUpFirstCharacter(p);
+
+                    while(checkingPrecedenceE != NULL) {
+                        totalEndingPrecedence++;
+                        splitUpLastCharacter(p);
+                        checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
+                    }
+
+                    char *checkingComma = (char *) memchr(p, ';', strlen(p));
+                    char *checkingComment = (char *) memchr(p, '#', strlen(p));
+
+                    if(checkingComma != NULL || checkingComment != NULL) {
+                        splitUpLastCharacterAlways(p);
+                        totalString += string(p);
+                        totalString += " ";
+                        for(int i=0; i<totalEndingPrecedence; i++) {
+                            totalString += ") ";
+                        }
+                        if(checkingComma != NULL) {
+                            totalString += "; ";
+                        }
+                        else {
+                            totalString += "# ";
+                        }
+                    }
+                    else {
+                        splitUpLastCharacterAlways(p);
+                        totalString += string(p);
+                        totalString += " ";
+                        totalString += "] ";
+                        for(int i=0; i<totalEndingPrecedence; i++) {
+                            totalString += ") ";
+                        }
+                    }
+
+                }
+                else if(checkingPrecedenceF != NULL && checkingTestB != NULL) {
                     while(checkingPrecedenceF != NULL) {
                         totalString += "( ";
                         checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
@@ -500,6 +555,14 @@ int main(int argc, char**argv) {
                     totalString += "[ ";
                     totalString += string(p);
                     totalString += " ";
+                }
+                else if(checkingTestB != NULL && checkingTestE != NULL) {
+                    totalString += "[ ";
+                    splitUpFirstCharacter(p);
+                    splitUpLastCharacter(p);
+                    totalString += string(p);
+                    totalString += " ";
+                    totalString += "] ";
                 }
                 else if(checkingTestB != NULL) {
                     totalString += "[ ";
@@ -769,12 +832,19 @@ int main(int argc, char**argv) {
             if(foundTest!=std::string::npos) {
                 string totalString = "";
                 char *p = strtok(cstr, " ");
-
                 while(p!=0) {
                     char *checkingTestB = (char *) memchr(p, '[', strlen(p));
                     char *checkingTestE = (char *) memchr(p, ']', strlen(p));
 
-                    if(checkingTestB != NULL) {
+                    if(checkingTestB != NULL && checkingTestE != NULL) {
+                        totalString += "[ ";
+                        splitUpFirstCharacter(p);
+                        splitUpLastCharacter(p);
+                        totalString += string(p);
+                        totalString += " ";
+                        totalString += "] ";
+                    }
+                    else if(checkingTestB != NULL) {
                         totalString += "[ ";
                         splitUpFirstCharacter(p);
                         totalString += string(p);
