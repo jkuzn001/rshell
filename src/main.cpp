@@ -637,7 +637,7 @@ int main(int argc, char**argv) {
             }
             //The returned String will contain everything with the operators being separate from the real
             //commands/flags/paths
-            //cout << totalString << endl;
+            cout << totalString << endl;
 
             //size_t CheckForPrecdence = userInput.find('(');
             //foundPrecedence!=std::string::npos
