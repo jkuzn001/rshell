@@ -9,7 +9,7 @@ class OR: public Connector {
     OR(Base* lhs, Base* rhs);
     OR();
     //execute function
-    virtual bool execute();
+    virtual bool execute(int in, int out);
 };
 
 #endif

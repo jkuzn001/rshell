@@ -22,11 +22,11 @@ class Cmd: public Base {
     //executes the command using the system calls fork
     //execvp and wait returns true if the command is executed
     //and false if it fails
-    virtual bool execute();
+    virtual bool execute(int in, int out);
 
 
     //For Debugging Purposes
-    string getCommand();
+    string get_data();
 
     //void printFlags();
 };

@@ -6,7 +6,8 @@
 class Exit: public Cmd {
     public:
     Exit();
-    virtual bool execute();
+    virtual bool execute(int in, int out);
+    virtual string get_data();
 };
 
 #endif

@@ -17,7 +17,8 @@ class Connector: public Base {
     Connector(Base* lhs, Base* rhs);
     Connector();
 
-    virtual bool execute() = 0; //execute function to be overridden by derived classes
+    virtual bool execute(int in, int out) = 0; //execute function to be overridden by derived classes
+    virtual string get_data(); 
 };
 
 #endif

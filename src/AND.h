@@ -8,7 +8,7 @@ class AND: public Connector {
     //constructors
     AND(Base* lhs, Base* rhs);
     AND();
-    virtual bool execute();
+    virtual bool execute(int in, int out);
 };
 
 #endif

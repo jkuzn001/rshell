@@ -11,7 +11,7 @@ class Semicolon: public Connector {
     //executes both of its children regardless of the success of the
     //other child
     //returns true or false based on the success of the right child
-    virtual bool execute();
+    virtual bool execute(int in, int out);
 };
 
 #endif

@@ -357,7 +357,7 @@ Base* grabTree(char *cstr) {
                 p = q;                  //q is already checked, set p to q
                 p = strtok(NULL, " ");  //Then advance p
 
-                if(testingCommand->getCommand() == "exit") {    //If the current token is an exit
+                if(testingCommand->get_data() == "exit") {    //If the current token is an exit
                     Exit *out = new Exit();                     //Create a Exit Object
                     commandList.push(out);                      //push it to the commandList
                 }                                               //Instead of pushing the testingCommand
@@ -485,7 +485,7 @@ int main(int argc, char**argv) {
 
         if(userInput == "exit") {               //Check if the user just inputed 1 exit command
             Exit *exit = new Exit();
-            exit->execute();
+            exit->execute(0,1);
             break;
         }
 
@@ -825,7 +825,7 @@ int main(int argc, char**argv) {
 
                 Connector *singleRun = completedListToRun.front();
                 completedListToRun.pop();
-                singleRun->execute();
+                singleRun->execute(0,1);
            }
            else {
                 Base* s = commandTreeList.front();
@@ -836,7 +836,7 @@ int main(int argc, char**argv) {
                     exit(1);
                 }
 
-                s->execute();
+                s->execute(0,1);
             }
         }
         else {
@@ -882,11 +882,11 @@ int main(int argc, char**argv) {
 	            strcpy(r, totalString.c_str());
 
                 Base *s = grabTree(r);
-                s->execute();
+                s->execute(0,1);
             }
             else {
                 Base* s = grabTree(cstr);
-                s->execute();
+                s->execute(0,1);
             }
         }
 

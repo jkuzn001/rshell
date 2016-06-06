@@ -8,8 +8,12 @@
 Exit::Exit()
 {}
 
-bool Exit::execute() {
+bool Exit::execute(int in, int out) {
     exit(0);
+}
+
+string Exit::get_data() {
+    return "Exit";
 }
 
 #endif

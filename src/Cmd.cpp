@@ -40,7 +40,7 @@ void Cmd::add_flag(char*a) {
 }
 
 //Used for the Exit Command to fix Exit bug
-string Cmd::getCommand() {
+string Cmd::get_data() {
     return command;
 }
 
@@ -55,7 +55,7 @@ void Cmd::printFlags()   {
 //executes the command using the system calls fork
 //execvp and wait returns true if the command is executed
 //and false if it fails
-bool Cmd::execute() {
+bool Cmd::execute(int in, int out) {
     //c-string array to pass to execvp
     //flags.push_back(NULL);
 
@@ -77,7 +77,17 @@ bool Cmd::execute() {
     if(pid == -1) {                             //if fork() fails
         perror("fork");                         //run error checking
     }
-    else if (pid == 0) {                        //Otherwise work on child process
+    else if (pid == 0) {                        
+        // changes the input and outputs as specified on the command line
+        if(dup2(in,0) == -1) {
+            perror("dup2");
+            return false;
+        }
+        if(dup2(out,1) == -1) {
+            perror("dup2");
+            return false;
+        }
+
         if(execvp(args[0], args) == -1) {       //if child fail, perform error checking and return false and exit
             ret = false;
             perror("execvp");
@@ -89,7 +99,7 @@ bool Cmd::execute() {
        if(waitpid(pid,&status,0) == -1) {       //pause the parent process
            perror("wait");
        }
-       if(WEXITSTATUS(status) != 0) {           //Zombiessssssssssssssss
+       if(WEXITSTATUS(status) != 0) {           
            ret = false;
        }
 

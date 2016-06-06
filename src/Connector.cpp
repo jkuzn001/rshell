@@ -12,4 +12,7 @@ Connector::Connector()  {
     this->lhs = NULL;
     this->lhs = NULL;
 }
+string Connector::get_data() {
+    return "error called get data on connector";
+}
 #endif

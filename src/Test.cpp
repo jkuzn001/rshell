@@ -38,7 +38,7 @@ void Test::add_flag(char*a) {
 }
 
 //Used for the Exit Command to fix Exit bug
-string Test::getCommand() {
+string Test::get_data() {
     return command;
 }
 
@@ -47,7 +47,7 @@ string Test::getCommand() {
 //if flag == -f it will be tested to see if it is a regular file
 //if flag == -d it will be tested to see if it is a directory
 //if no flag is provided then -e will be assumed
-bool Test::execute() {
+bool Test::execute(int in, int out) {
     struct stat buf;
     string flag;
     string path;
@@ -70,6 +70,10 @@ bool Test::execute() {
     if (statret == 0) {
         exists = true;
     }
+
+    dup2(in,0);
+    dup2(out,1);
+
     if(statret == -1) {
         perror("stat");
         return false;
