@@ -12,8 +12,8 @@ OR::OR(): Connector() {}
 //returns true if both children execute successfully
 //otherwise returns false
 bool OR::execute(int in, int out) {
-    if(!lhs->execute(0,1)) {
-        if(rhs->execute(0,1)) {
+    if(!lhs->execute(in,out)) {
+        if(rhs->execute(in,out)) {
             return true;
         }
         else {
