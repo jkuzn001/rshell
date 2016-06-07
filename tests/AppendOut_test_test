@@ -1,0 +1,13 @@
+ls >> testfiles/TestInput2
+ps >> testfiles/TestInput1
+echo this is a test > OutputTest3
+echo this sentence has five words | wc > OutputTest4
+echo hello world > OutputTest1
+cat < OutputRed_test_test > OutputTest2
+echo test > OutputTest5
+ls > OutputTest1
+rm OutputTest1
+rm OutputTest2
+rm OutputTest3
+rm OutputTest5
+exit

@@ -1,0 +1,9 @@
+ls | cat
+ls -a | grep src
+ls | cat | wc
+ls | wc
+ps | wc
+cat < testfiles/TestInput1 | tr A-Z a-z | wc > testfiles/TestOutput1
+cat < testfiles/TestInput2 | tee TestOutput1
+echo hello world this is a test | wc
+exit

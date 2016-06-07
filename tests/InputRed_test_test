@@ -1,0 +1,9 @@
+cat < testfiles/TestInput1
+wc < testfiles/TestInput2
+tr A-Z a-z < testfiles/TestInput3
+grep it < testfiles/TestInput4
+cat < testfiles/TestInput3 > TestOutput
+cat < testfiles/TestInput1 | tr A-Z a-z
+grep 1 < testfiles/TestInput4
+grep 2 < testfiles/TestInput2 | wc
+exit
