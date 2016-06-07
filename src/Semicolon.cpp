@@ -12,8 +12,8 @@ Semicolon::Semicolon(): Connector() {}
 //other child
 //returns true or false based on the success of the right child
 bool Semicolon::execute(int in, int out) {
-    lhs->execute(0,1);
-    if(rhs->execute(0,1)) {
+    lhs->execute(in,out);
+    if(rhs->execute(in,out)) {
         return true;
     }
     else {

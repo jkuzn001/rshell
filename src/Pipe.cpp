@@ -25,13 +25,18 @@ bool Pipe::execute(int in, int out) {
         return false;
     }
 
-    close(fds[0]);
 
-    if(lhs->execute(in,fds[1])) {
+    if(!lhs->execute(in,fds[1])) {
         return false;
     }
+    
     close(fds[1]);
-    return rhs->execute(fds[0],out);
+
+    if(!rhs->execute(fds[0],out)) {
+        return false;
+    }
+    close(fds[0]);
+    return true;
 }
 
 #endif
