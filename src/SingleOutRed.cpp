@@ -19,10 +19,6 @@ SingleOutRed::SingleOutRed(): Connector() {}
 bool SingleOutRed::execute(int in, int out) {
     string outfile = rhs->get_data();
     out = open(outfile.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
-    if(dup2(out,1) == -1) {
-        perror("dup2");
-        return false;
-    }
 
     return lhs->execute(in,out);
 }

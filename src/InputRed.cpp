@@ -22,11 +22,6 @@ InputRed::InputRed(): Connector() {}
 bool InputRed::execute(int in, int out) {
     string infile = rhs->get_data();
     in = open(infile.c_str(),O_RDONLY);
-    if(dup2(in,0) == -1) {
-        perror("dup2");
-        return false;
-    }
-
 
     return lhs->execute(in,out);
 }
