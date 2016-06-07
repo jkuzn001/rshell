@@ -77,7 +77,7 @@ bool Cmd::execute(int in, int out) {
     if(pid == -1) {                             //if fork() fails
         perror("fork");                         //run error checking
     }
-    else if (pid == 0) {                        
+    else if (pid == 0) {
         // changes the input and outputs as specified on the command line
         if(dup2(in,0) == -1) {
             perror("dup2");
@@ -99,7 +99,7 @@ bool Cmd::execute(int in, int out) {
        if(waitpid(pid,&status,0) == -1) {       //pause the parent process
            perror("wait");
        }
-       if(WEXITSTATUS(status) != 0) {           
+       if(WEXITSTATUS(status) != 0) {
            ret = false;
        }
 

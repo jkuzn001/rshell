@@ -9,6 +9,7 @@
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <iterator>
 
 using namespace std;
 
@@ -30,6 +31,7 @@ using namespace std;
 const string AND_STRING = "&&";
 const string OR_STRING = "||";
 const string SEMI_STRING = ";";
+
 const string INPUT_RED = "<";
 const string SINGLE_OUTPUT_RED = ">";
 const string DOUBLE_OUTPUT_RED = ">>";
@@ -71,11 +73,48 @@ bool checkCon(char *q) {
     s.push_back("||");
     //Note that ; and # are not included because they have special parsing properties
 
+    s.push_back("|"); //Pipe
+    s.push_back(">");
+    s.push_back(">>");
+    s.push_back("<");
     //Go through the vector of connectors and check if char *q is equal to any of the connectors
     for(unsigned i=0; i<s.size(); i++)
         if(q == s.at(i))
             return false;
     return true;
+}
+
+/*Function used to delete the connectors in between and return the newly created string*/
+string SepCommands(char *q) {
+    string Q = string(q);
+    string results = "";
+
+    for(string::iterator it = Q.begin(); it < Q.end(); it++) {
+        if(*it == '<') {
+            results += " < ";
+        }
+        else if(*it == '>') {
+            string::iterator temp = it;
+            temp++;
+            if(*temp == '>') {
+                results += " >> ";
+                it = temp;
+            }
+            else {
+                results += " > ";
+            }
+        }
+        else if(*it == '|') {
+            results += " | ";
+        }
+        else if(*it == ')') {
+
+        }
+        else {
+            results += *it;
+        }
+    }
+    return results;
 }
 
 //Checks all the connectors
@@ -85,6 +124,7 @@ bool checkAllCon(char *q) {
     s.push_back("||");
     s.push_back("#");
     s.push_back(";");
+
     s.push_back("|"); //Pipe
     s.push_back(">");
     s.push_back(">>");
@@ -306,6 +346,7 @@ Base* grabTree(char *cstr) {
                     break;
                 }
             }
+
             //Assume that the first Token is always a command thus make a Cmd Object
             Cmd *testingCommand = new Cmd(p);
             char *q = p;
@@ -349,27 +390,24 @@ Base* grabTree(char *cstr) {
                                 testingCommand->add_flag(q);
                             }
                         }
-                        else {          //If token is a Connector
+                        else {
+                            //If token is a Connector
                             char *com1 = (char *) memchr(q, '#', strlen(q));     //Check if '#' is in Token
                             if(com1 != NULL) {
                                 cout << "# found!" << endl;
                                 commentDetected = true;
                                 break;
                             }
-
                             if(!checkConnectors) {
                                 connectorList.push(q);  //push the token into the connectorList
                             }
-
                             break;
                         }
                     }
                     q = strtok(NULL, " ");  //Advance through until you find a connector or reach the end
                 }//End of while
-
                 p = q;                  //q is already checked, set p to q
                 p = strtok(NULL, " ");  //Then advance p
-
                 if(testingCommand->get_data() == "exit") {    //If the current token is an exit
                     Exit *out = new Exit();                     //Create a Exit Object
                     commandList.push(out);                      //push it to the commandList
@@ -385,7 +423,6 @@ Base* grabTree(char *cstr) {
                 firstArgSemi = false;                           //reset the firstArgSemi condiction
             }
         }
-
         //Construction of tree execution
         if(connectorList.size() > 0) { //Only runs when there are 2 or more commands
             //Pop the first two commands out of the commandList
@@ -404,12 +441,28 @@ Base* grabTree(char *cstr) {
                 AND *n = new AND(lhs, rhs);
                 completedListToRun.push(n);
             }
-            if(temp == OR_STRING) {
+            else if(temp == OR_STRING) {
                 OR *n = new OR(lhs, rhs);
                 completedListToRun.push(n);
             }
-            if(temp == SEMI_STRING) {
+            else if(temp == SEMI_STRING) {
                 Semicolon *n = new Semicolon(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            else if(temp == INPUT_RED) {
+                InputRed *n = new InputRed(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            else if(temp == SINGLE_OUTPUT_RED) {
+                SingleOutRed *n = new SingleOutRed(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            else if(temp == DOUBLE_OUTPUT_RED) {
+                DoubleOutRed *n = new DoubleOutRed(lhs, rhs);
+                completedListToRun.push(n);
+            }
+            else if(temp == PIPE) {
+                Pipe *n = new Pipe(lhs, rhs);
                 completedListToRun.push(n);
             }
 
@@ -439,7 +492,22 @@ Base* grabTree(char *cstr) {
                     Semicolon *n = new Semicolon(tempLHS, rhs);
                     completedListToRun.push(n);
                 }
-
+                else if(temp == INPUT_RED) {
+                    InputRed *n = new InputRed(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp == SINGLE_OUTPUT_RED) {
+                    SingleOutRed *n = new SingleOutRed(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp == DOUBLE_OUTPUT_RED) {
+                    DoubleOutRed *n = new DoubleOutRed(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp == PIPE) {
+                    Pipe *n = new Pipe(tempLHS, rhs);
+                    completedListToRun.push(n);
+                }
             }
             //After building the tree, pop the single command from completedListToRun
             //and run execute on the command. The execute function will travel through the completed tree
@@ -448,7 +516,6 @@ Base* grabTree(char *cstr) {
             Connector *singleRun = completedListToRun.front();
             completedListToRun.pop();
             return singleRun;
-
         }
         else {  //If there are no connectors then there must only be one cmd and/or a bunch of flags
             if(commandList.size() != 1) {   //MAKE SURE THAT THERE IS ONLY ONE CMD
@@ -529,14 +596,48 @@ int main(int argc, char**argv) {
                 char *checkingTestE = (char *) memchr(p, ']', strlen(p));
                 char *checkingInput = (char *) memchr(p, '<', strlen(p));
                 char *checkingPipe = (char *) memchr(p, '|', strlen(p));
-
-                string pString = string(p);
+                char *checkingOutput = (char *) memchr(p, '>', strlen(p));
 
                 int totalEndingPrecedence = 0;
 
+                if(checkingPrecedenceF != NULL && (checkingInput != NULL || checkingPipe != NULL || checkingOutput!= NULL)) {
+                    while(checkingPrecedenceF != NULL) {
+                        totalString += "( ";
+                        splitUpFirstCharacter(p);
+                        checkingPrecedenceF = (char *) memchr(p, '(', strlen(p));
+                    }
+                    string pString = SepCommands(p);
 
+                    //cout << pString << endl;
 
-                if(checkingPrecedenceF != NULL && checkingPrecedenceF != NULL && checkingTestB != NULL && checkingTestE != NULL) {
+                    totalString += pString;
+                    while(checkingPrecedenceE != NULL) {
+                        totalEndingPrecedence++;
+                        splitUpLastCharacter(p);
+                        checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
+                    }
+
+                    char *checkingComma = (char *) memchr(p, ';', strlen(p));
+                    char *checkingComment = (char *) memchr(p, '#', strlen(p));
+
+                    if(checkingComma != NULL || checkingComment != NULL) {
+                        splitUpLastCharacterAlways(p);
+                        totalString += string(p);
+                        totalString += " ";
+                        for(int i=0; i<totalEndingPrecedence; i++) {
+                            totalString += ") ";
+                        }
+                        if(checkingComma != NULL) {
+                            totalString += "; ";
+                        }
+                    }
+                    else {
+                        for(int i=0; i<totalEndingPrecedence; i++) {
+                            totalString += " ) ";
+                        }
+                    }
+                }
+                else if(checkingPrecedenceF != NULL && checkingTestB != NULL && checkingTestE != NULL) {
                     while(checkingPrecedenceF != NULL) {
                         totalString += "( ";
                         splitUpFirstCharacter(p);
@@ -579,6 +680,39 @@ int main(int argc, char**argv) {
                         }
                     }
 
+                }
+                else if(checkingInput != NULL || checkingOutput != NULL || checkingPipe != NULL) {
+                    string pString = SepCommands(p);
+
+                    //cout << pString << endl;
+
+                    totalString += pString;
+
+                    while(checkingPrecedenceE != NULL) {
+                        totalEndingPrecedence++;
+                        splitUpLastCharacter(p);
+                        checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
+                    }
+
+                    char *checkingComma = (char *) memchr(p, ';', strlen(p));
+                    char *checkingComment = (char *) memchr(p, '#', strlen(p));
+
+                    if(checkingComma != NULL || checkingComment != NULL) {
+                        splitUpLastCharacterAlways(p);
+                        totalString += string(p);
+                        totalString += " ";
+                        for(int i=0; i<totalEndingPrecedence; i++) {
+                            totalString += ") ";
+                        }
+                        if(checkingComma != NULL) {
+                            totalString += "; ";
+                        }
+                    }
+                    else {
+                        for(int i=0; i<totalEndingPrecedence; i++) {
+                            totalString += " ) ";
+                        }
+                    }
                 }
                 else if(checkingPrecedenceF != NULL && checkingTestB != NULL) {
                     while(checkingPrecedenceF != NULL) {
@@ -661,7 +795,7 @@ int main(int argc, char**argv) {
             }
             //The returned String will contain everything with the operators being separate from the real
             //commands/flags/paths
-            cout << totalString << endl;
+            //cout << totalString << endl;
 
             //size_t CheckForPrecdence = userInput.find('(');
             //foundPrecedence!=std::string::npos
@@ -859,7 +993,6 @@ int main(int argc, char**argv) {
                     cout << "Error: commandTreeList.size() != 0" << endl;
                     exit(1);
                 }
-
                 s->execute(0,1);
             }
         }
@@ -908,6 +1041,40 @@ int main(int argc, char**argv) {
                 Base *s = grabTree(r);
                 s->execute(0,1);
             }
+            /*else if(checkingInput != NULL || checkingOutput != NULL || checkingPipe != NULL) {
+                string pString = SepCommands(p);
+
+                //cout << pString << endl;
+
+                totalString += pString;
+
+                while(checkingPrecedenceE != NULL) {
+                    totalEndingPrecedence++;
+                    splitUpLastCharacter(p);
+                    checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
+                }
+
+                char *checkingComma = (char *) memchr(p, ';', strlen(p));
+                char *checkingComment = (char *) memchr(p, '#', strlen(p));
+
+                if(checkingComma != NULL || checkingComment != NULL) {
+                    splitUpLastCharacterAlways(p);
+                    totalString += string(p);
+                    totalString += " ";
+                    for(int i=0; i<totalEndingPrecedence; i++) {
+                        totalString += ") ";
+                    }
+                    if(checkingComma != NULL) {
+                        totalString += "; ";
+                    }
+                }
+                else {
+                    for(int i=0; i<totalEndingPrecedence; i++) {
+                        totalString += " ) ";
+                    }
+                }
+            }*/
+
             else {
                 Base* s = grabTree(cstr);
                 s->execute(0,1);

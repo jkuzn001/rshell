@@ -9,9 +9,5 @@ class DoubleOutRed: public Connector {
     DoubleOutRed(Base* lhs, Base* rhs);
     DoubleOutRed();
     virtual bool execute(int in, int out);
-
 };
-
-
-
 #endif

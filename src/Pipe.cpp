@@ -29,7 +29,7 @@ bool Pipe::execute(int in, int out) {
     if(!lhs->execute(in,fds[1])) {
         return false;
     }
-    
+
     close(fds[1]);
 
     if(!rhs->execute(fds[0],out)) {
