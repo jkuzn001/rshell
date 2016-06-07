@@ -795,7 +795,7 @@ int main(int argc, char**argv) {
             }
             //The returned String will contain everything with the operators being separate from the real
             //commands/flags/paths
-            //cout << totalString << endl;
+            cout << totalString << endl;
 
             //size_t CheckForPrecdence = userInput.find('(');
             //foundPrecedence!=std::string::npos
@@ -957,7 +957,22 @@ int main(int argc, char**argv) {
                     Semicolon *n = new Semicolon(lhs, rhs);
                     completedListToRun.push(n);
                 }
-
+                else if(temp == INPUT_RED) {
+                    InputRed *n = new InputRed(lhs, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp == SINGLE_OUTPUT_RED) {
+                    SingleOutRed *n = new SingleOutRed(lhs, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp == DOUBLE_OUTPUT_RED) {
+                    DoubleOutRed *n = new DoubleOutRed(lhs, rhs);
+                    completedListToRun.push(n);
+                }
+                else if(temp == PIPE) {
+                    Pipe *n = new Pipe(lhs, rhs);
+                    completedListToRun.push(n);
+                }
                 while(connectors.size() > 0) {
                     Connector *tempLHS = completedListToRun.front();
                     completedListToRun.pop();
@@ -979,7 +994,24 @@ int main(int argc, char**argv) {
                         Semicolon *n = new Semicolon(tempLHS, rhs);
                         completedListToRun.push(n);
                     }
+                    else if(temp == INPUT_RED) {
+                        InputRed *n = new InputRed(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                    else if(temp == SINGLE_OUTPUT_RED) {
+                        SingleOutRed *n = new SingleOutRed(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                    else if(temp == DOUBLE_OUTPUT_RED) {
+                        DoubleOutRed *n = new DoubleOutRed(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
+                    else if(temp == PIPE) {
+                        Pipe *n = new Pipe(tempLHS, rhs);
+                        completedListToRun.push(n);
+                    }
                 }
+
 
                 Connector *singleRun = completedListToRun.front();
                 completedListToRun.pop();
