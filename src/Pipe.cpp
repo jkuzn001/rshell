@@ -34,6 +34,4 @@ bool Pipe::execute(int in, int out) {
     return rhs->execute(fds[0],out);
 }
 
-
-
 #endif

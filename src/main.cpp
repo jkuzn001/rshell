@@ -21,10 +21,19 @@ using namespace std;
 #include "Exit.cpp"
 #include "Test.cpp"
 
+#include "SingleOutRed.cpp"
+#include "DoubleOutRed.cpp"
+#include "InputRed.cpp"
+#include "Pipe.cpp"
+
 //Global Variables used to check connectors
 const string AND_STRING = "&&";
 const string OR_STRING = "||";
 const string SEMI_STRING = ";";
+const string INPUT_RED = "<";
+const string SINGLE_OUTPUT_RED = ">";
+const string DOUBLE_OUTPUT_RED = ">>";
+const string PIPE = "|";
 
 //Function used to delete the first character of a cString
 void splitUpFirstCharacter(char* p) {
@@ -76,6 +85,10 @@ bool checkAllCon(char *q) {
     s.push_back("||");
     s.push_back("#");
     s.push_back(";");
+    s.push_back("|"); //Pipe
+    s.push_back(">");
+    s.push_back(">>");
+    s.push_back("<");
 
     for(unsigned i=0; i<s.size(); i++)
         if(q == s.at(i))
@@ -498,7 +511,11 @@ int main(int argc, char**argv) {
 
         size_t foundPrecedence = userInput.find('(');               //Check if '(' is in the userString
         size_t foundTest = userInput.find('[');                     //Same for '['
-        if(foundPrecedence!=std::string::npos || (foundPrecedence!=std::string::npos && foundTest!=std::string::npos)) {    //If we find the '(' or if we find both '(' and '[' operators
+        size_t foundOutput = userInput.find('>');
+        size_t foundInput = userInput.find('<');
+        size_t foundPipe = userInput.find('|');
+
+        if(foundPrecedence!=std::string::npos || (foundPrecedence!=std::string::npos && foundTest!=std::string::npos) || (foundPrecedence!=std::string::npos && (foundOutput!=std::string::npos && foundInput!=std::string::npos && foundPipe!=std::string::npos))) {    //If we find the '(' or if we find both '(' and '[' operators
             string totalString = "";
 
             char *p = strtok(cstr, " ");
@@ -510,7 +527,14 @@ int main(int argc, char**argv) {
                 char *checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
                 char *checkingTestB = (char *) memchr(p, '[', strlen(p));
                 char *checkingTestE = (char *) memchr(p, ']', strlen(p));
+                char *checkingInput = (char *) memchr(p, '<', strlen(p));
+                char *checkingPipe = (char *) memchr(p, '|', strlen(p));
+
+                string pString = string(p);
+
                 int totalEndingPrecedence = 0;
+
+
 
                 if(checkingPrecedenceF != NULL && checkingPrecedenceF != NULL && checkingTestB != NULL && checkingTestE != NULL) {
                     while(checkingPrecedenceF != NULL) {

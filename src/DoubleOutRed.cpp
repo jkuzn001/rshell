@@ -27,6 +27,4 @@ bool DoubleOutRed::execute(int in, int out) {
     return lhs->execute(in,out);
 }
 
-
-
 #endif
