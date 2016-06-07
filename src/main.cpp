@@ -138,6 +138,17 @@ bool checkAllCon(char *q) {
 
 //Function will take in a cstr and return a tree representation of said cstr.
 Base* grabTree(char *cstr) {
+    //Checking for input/output redirection and piping
+    string StringCstr = string(cstr);
+
+    size_t findInput = StringCstr.find('<');
+    size_t findOutput = StringCstr.find('>');
+    size_t findPipe = StringCstr.find('|');
+
+    if(findInput!=std::string::npos || findOutput!=std::string::npos || findPipe!=std::string::npos) {
+        StringCstr = SepCommands(cstr);
+        strcpy(cstr, StringCstr.c_str());
+    }
 
     queue<Base *> commandList;               //Separates the Commands to create Cmd's objects respectively
     queue<char *> connectorList;            //Same here, but for Connectors ofc ^
@@ -150,7 +161,6 @@ Base* grabTree(char *cstr) {
     char *checkingSemi = (char *) memchr(p, ';', strlen(p));          //check first Token for Semi
     char *checkingComment = (char *) memchr(p, '#', strlen(p));       //check first Token for Comment
     char *checkingTest = (char *) memchr(p, '[', strlen(p));          //check first Token for Test
-
     string checkingStringTest = string(p);                            //checks for 'test'
 
     if(checkingSemi != NULL) {                                        //if 1st Token == ';'
@@ -492,19 +502,19 @@ Base* grabTree(char *cstr) {
                     Semicolon *n = new Semicolon(tempLHS, rhs);
                     completedListToRun.push(n);
                 }
-                else if(temp == INPUT_RED) {
+                else if(temp2 == INPUT_RED) {
                     InputRed *n = new InputRed(tempLHS, rhs);
                     completedListToRun.push(n);
                 }
-                else if(temp == SINGLE_OUTPUT_RED) {
+                else if(temp2 == SINGLE_OUTPUT_RED) {
                     SingleOutRed *n = new SingleOutRed(tempLHS, rhs);
                     completedListToRun.push(n);
                 }
-                else if(temp == DOUBLE_OUTPUT_RED) {
+                else if(temp2 == DOUBLE_OUTPUT_RED) {
                     DoubleOutRed *n = new DoubleOutRed(tempLHS, rhs);
                     completedListToRun.push(n);
                 }
-                else if(temp == PIPE) {
+                else if(temp2 == PIPE) {
                     Pipe *n = new Pipe(tempLHS, rhs);
                     completedListToRun.push(n);
                 }
@@ -795,7 +805,7 @@ int main(int argc, char**argv) {
             }
             //The returned String will contain everything with the operators being separate from the real
             //commands/flags/paths
-            cout << totalString << endl;
+            //cout << totalString << endl;
 
             //size_t CheckForPrecdence = userInput.find('(');
             //foundPrecedence!=std::string::npos
@@ -994,19 +1004,19 @@ int main(int argc, char**argv) {
                         Semicolon *n = new Semicolon(tempLHS, rhs);
                         completedListToRun.push(n);
                     }
-                    else if(temp == INPUT_RED) {
+                    else if(temp2 == INPUT_RED) {
                         InputRed *n = new InputRed(tempLHS, rhs);
                         completedListToRun.push(n);
                     }
-                    else if(temp == SINGLE_OUTPUT_RED) {
+                    else if(temp2 == SINGLE_OUTPUT_RED) {
                         SingleOutRed *n = new SingleOutRed(tempLHS, rhs);
                         completedListToRun.push(n);
                     }
-                    else if(temp == DOUBLE_OUTPUT_RED) {
+                    else if(temp2 == DOUBLE_OUTPUT_RED) {
                         DoubleOutRed *n = new DoubleOutRed(tempLHS, rhs);
                         completedListToRun.push(n);
                     }
-                    else if(temp == PIPE) {
+                    else if(temp2 == PIPE) {
                         Pipe *n = new Pipe(tempLHS, rhs);
                         completedListToRun.push(n);
                     }
@@ -1073,40 +1083,6 @@ int main(int argc, char**argv) {
                 Base *s = grabTree(r);
                 s->execute(0,1);
             }
-            /*else if(checkingInput != NULL || checkingOutput != NULL || checkingPipe != NULL) {
-                string pString = SepCommands(p);
-
-                //cout << pString << endl;
-
-                totalString += pString;
-
-                while(checkingPrecedenceE != NULL) {
-                    totalEndingPrecedence++;
-                    splitUpLastCharacter(p);
-                    checkingPrecedenceE = (char *) memchr(p, ')', strlen(p));
-                }
-
-                char *checkingComma = (char *) memchr(p, ';', strlen(p));
-                char *checkingComment = (char *) memchr(p, '#', strlen(p));
-
-                if(checkingComma != NULL || checkingComment != NULL) {
-                    splitUpLastCharacterAlways(p);
-                    totalString += string(p);
-                    totalString += " ";
-                    for(int i=0; i<totalEndingPrecedence; i++) {
-                        totalString += ") ";
-                    }
-                    if(checkingComma != NULL) {
-                        totalString += "; ";
-                    }
-                }
-                else {
-                    for(int i=0; i<totalEndingPrecedence; i++) {
-                        totalString += " ) ";
-                    }
-                }
-            }*/
-
             else {
                 Base* s = grabTree(cstr);
                 s->execute(0,1);
