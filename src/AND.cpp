@@ -12,8 +12,8 @@ AND::AND(): Connector() {}
 //returns true if both children execute successfully
 //otherwise returns false
 bool AND::execute(int in, int out) {
-    if(lhs->execute(in,1)){
-       if(rhs->execute(0,out)){
+    if(lhs->execute(in,out)){
+       if(rhs->execute(in,out)){
            return true;
        }
        else {
