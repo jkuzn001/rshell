@@ -105,7 +105,15 @@ string SepCommands(char *q) {
             }
         }
         else if(*it == '|') {
-            results += " | ";
+            string::iterator temp = it;
+            temp++;
+            if(*temp == '|') {
+                results += " || ";
+                it = temp;
+            }
+            else {
+                results += " | ";
+            }
         }
         else if(*it == ')') {
 
@@ -144,7 +152,6 @@ Base* grabTree(char *cstr) {
     size_t findInput = StringCstr.find('<');
     size_t findOutput = StringCstr.find('>');
     size_t findPipe = StringCstr.find('|');
-
     if(findInput!=std::string::npos || findOutput!=std::string::npos || findPipe!=std::string::npos) {
         StringCstr = SepCommands(cstr);
         strcpy(cstr, StringCstr.c_str());
