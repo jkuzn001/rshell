@@ -71,8 +71,14 @@ bool Test::execute(int in, int out) {
         exists = true;
     }
 
-    dup2(in,0);
-    dup2(out,1);
+    if(dup2(in,0) == -1) {
+        perror("dup2");
+        return false;
+    }
+    if(dup2(out,1) == -1) {
+        perror("dup2");
+        return false;
+    }
 
     if(statret == -1) {
         perror("stat");
