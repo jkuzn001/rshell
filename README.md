@@ -24,6 +24,8 @@ This is the Turtle Shell project of Jacob Kuznicki and Lam Duy Le (aka Patrick L
 
 For the second part of this assignment we added some functionality to our Turtle Shell.  We added in the test command that can be called using either the command "test" or by using [].  This command will test if a given file or directory exists in a given path.  The test command's behavior can be augmented by giving it one of the following flags: -e tests if the file or directory exists (is assumed if no flag is provided), -f tests if the file or directory given is a regular file, -d tests if the file or directory given is a directory.  We also added in precedence of commands with ().
 
+For the final part of this assignment we added in input and output redirection and piping.  The input redirection operator (<) will take in input from an input file for use by a command.  There are two different output redirection operators.  The first one (>) will take the output from a command line and output it to a file, if the file does not exist then it will be created.  The second one (>>) will take the output from a command line and append it onto the end of a file if it already exists, if it does not exist then the file will be created.  The pipe operator (|) will take the output from a command and pipe it to another command.
+
 UML DIAGRAM
 ------------
 
