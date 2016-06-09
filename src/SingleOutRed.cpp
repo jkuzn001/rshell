@@ -20,7 +20,7 @@ bool SingleOutRed::execute(int in, int out) {
     string outfile = rhs->get_data();
     out = open(outfile.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
 
-    return lhs->execute(in,out);
+    return lhs->execute(0,out);
 }
 
 
