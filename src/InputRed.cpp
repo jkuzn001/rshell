@@ -23,7 +23,7 @@ bool InputRed::execute(int in, int out) {
     string infile = rhs->get_data();
     in = open(infile.c_str(),O_RDONLY);
 
-    return lhs->execute(in,out);
+    return lhs->execute(in,1);
 }
 
 
