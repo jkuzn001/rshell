@@ -71,10 +71,6 @@ bool Test::execute(int in, int out) {
         exists = true;
     }
 
-    if(dup2(in,0) == -1) {
-        perror("dup2");
-        return false;
-    }
     if(dup2(out,1) == -1) {
         perror("dup2");
         return false;
