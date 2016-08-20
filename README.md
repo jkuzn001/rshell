@@ -45,11 +45,11 @@ From there we will construct a tree that will recursively call execute(), which 
 
 Tree Representation For Precedence
 ------------
-We decided to expand the Turtle shell by implementing the Precedence Operator. To accomplish this, we decided to encapsulate the tree representation algorithm into a **Base *grabTree(char *cstr)** which will pass in a cstring and return a Base tree representation. From there we can parse the User's input to determine whether a string is between a precedence operator. To accomplish this, we were inspired by the post-fix calucator algorithm thus we constructed our own version of a stack familiar algorithm. Lastly, pushed all returned Base tree representation into a __queue<Base *> treeBranches__. A picture representation is shown below of the example:  "(echo A && echo B) && (echo C && echo D)".  
+We decided to expand the Turtle shell by implementing the Precedence Operator. To accomplish this, we decided to encapsulate the tree representation algorithm into a **Base *grabTree(char *cstr)** which will pass in a cstring and return a Base tree representation. From there we can parse the User's input to determine whether a string is between a precedence operator. To accomplish this, we were inspired by the post-fix calucator algorithm thus we constructed our own version of a stack familiar algorithm. Lastly, pushed all returned Base tree representation into a __queue<Base *> treeBranches__. A picture representation is shown below of the example:  "(echo A && echo B) && (echo C && echo D)".
 
 ![Alt text](/pictures/PrecedenceParsing.png?raw=true "Optional Title")
 
-From There we shall reuse our previous algorithms to connect all tree branches into one whole tree. A picture representation is shown below. 
+From There we shall reuse our previous algorithms to connect all tree branches into one whole tree. A picture representation is shown below.
 
 ![Alt text](/pictures/PrecedenceTree.png?raw=true "Optional Title")
 
@@ -80,7 +80,7 @@ B <br /><br />
 * if no flag is provided then -e will be assumed
 test command will print out (true) and (false) based on returned boolean value respectively. <br />
 Example: test -e main.cpp or [-e main.cpp] will return (true) or (false) based on whether main.cpp is in the current directory. <br />
-Lastly the test command can be combined with other connectors discussed above. 
+Lastly the test command can be combined with other connectors discussed above.
 
 **User information work!!!**<br />
 Instead of having Turtle Shell print a boring "$" before each command.
